@@ -1,0 +1,66 @@
+{
+  "id": "com.sigenergy",
+  "version": "0.1.0",
+  "compatibility": ">=12.4.5",
+  "sdk": 3,
+  "platforms": ["local"],
+  "brandColor": "#00B5B1",
+  "name": {
+    "en": "Sigenergy",
+    "sv": "Sigenergy"
+  },
+  "description": {
+    "en": "Powering tomorrow with revolutions"
+  },
+  "tags": {
+    "en": [
+      "sigenergy",
+      "sigenstor",
+      "siggen",
+      "inverter",
+      "charger",
+      "solar",
+      "pv",
+      "energy",
+      "modbus",
+      "battery"
+    ],
+    "sv": [
+      "sigenergy",
+      "sigenstor",
+      "siggen",
+      "växelriktare",
+      "laddare",
+      "sol",
+      "pv",
+      "energi",
+      "modbus",
+      "batteri"
+    ]
+  },
+  "category": [
+    "energy"
+  ],
+  "images": {
+    "xlarge": "/assets/images/xlarge.jpg",
+    "large": "/assets/images/large.jpg",
+    "small": "/assets/images/small.jpg"
+  },
+  "bugs": {
+    "url": "https://github.com/ricott/homey-com.sigenergy/issues"
+  },
+  "source": "https://github.com/ricott/homey-com.sigenergy",
+  "homeyCommunityTopicId": 46219,
+  "author": {
+    "name": "Richard Barkestam",
+    "email": "richard@barkestam.se"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "RBarkestam",
+        "currency": "EUR"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "pair": {
+        "title": "Add a Sigenergy device",
+        "nosettings": "Please fill in all the required fields.",
+        "intro": "Enter the details of your Sigenergy device",
+        "address": "IP Address",
+        "port": "Port",
+        "connect": "Connect",
+        "connecting": "Connecting..."
+    }
+}  

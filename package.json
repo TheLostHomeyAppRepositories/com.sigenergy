@@ -1,0 +1,12 @@
+{
+  "name": "com.sigenergy",
+  "version": "0.1.0",
+  "main": "app.js",
+  "dependencies": {
+    "enum": "^3.0.4",
+    "jsmodbus": "^4.0.10"
+  },
+  "scripts": {},
+  "author": "Richard Barkestam",
+  "license": "GPL-3.0-only"
+}

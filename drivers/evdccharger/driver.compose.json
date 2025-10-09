@@ -1,0 +1,74 @@
+{
+    "name": {
+        "en": "EV DC Charger"
+    },
+    "images": {
+        "small": "drivers/evcharger/assets/images/small.png",
+        "large": "drivers/evcharger/assets/images/large.png",
+        "xlarge": "drivers/evcharger/assets/images/xlarge.png"
+    },
+    "class": "evcharger",
+    "platforms": [
+        "local"
+    ],
+    "connectivity": [
+        "lan"
+    ],
+    "energy": {
+        "evCharger": true,
+        "meterPowerImportedCapability": "meter_power.charged",
+        "meterPowerExportedCapability": "meter_power.discharged"
+    },
+    "capabilities": [
+        "evcharger_charging",
+        "evcharger_charging_state",
+        "measure_power",
+        "measure_current",
+        "measure_voltage.vehicle",
+        "measure_battery.vehicle",
+        "meter_power.charged",
+        "meter_power.discharged"
+    ],
+    "capabilitiesOptions": {
+        "meter_power.charged": {
+            "title": {
+                "en": "Charged energy",
+                "sv": "Laddad energi"
+            }
+        },
+        "meter_power.discharged": {
+            "title": {
+                "en": "Discharged energy",
+                "sv": "Urladdad energi"
+            }
+        },
+        "measure_voltage.vehicle": {
+            "title": {
+                "en": "Vehicle battery voltage",
+                "sv": "Batterispänning"
+            }
+        },
+        "measure_battery.vehicle": {
+            "title": {
+                "en": "Vehicle battery SOC",
+                "sv": "Batteriets SOC"
+            }
+        }
+    },
+    "pair": [
+        {
+            "id": "settings"
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "next": "add_devices"
+            }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

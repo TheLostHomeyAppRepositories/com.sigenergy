@@ -1,0 +1,74 @@
+{
+    "name": {
+        "en": "Battery",
+        "sv": "Batteri"
+    },
+    "images": {
+        "xlarge": "drivers/battery/assets/images/xlarge.png",
+        "large": "drivers/battery/assets/images/large.png",
+        "small": "drivers/battery/assets/images/small.png"
+    },
+    "class": "battery",
+    "platforms": [
+        "local"
+    ],
+    "connectivity": [
+        "lan"
+    ],
+    "energy": {
+        "homeBattery": true,
+        "meterPowerImportedCapability": "meter_power.charged",
+        "meterPowerExportedCapability": "meter_power.discharged"
+    },
+    "capabilities": [
+        "measure_battery",
+        "battery_charging_state",
+        "measure_power",
+        "measure_temperature.minCell",
+        "measure_temperature.maxCell",
+        "meter_power.charged",
+        "meter_power.discharged"
+    ],
+    "capabilitiesOptions": {
+        "measure_temperature.minCell": {
+            "title": {
+                "en": "Min cell temp",
+                "sv": "Min celltemp"
+            }
+        },
+        "measure_temperature.maxCell": {
+            "title": {
+                "en": "Max cell temp",
+                "sv": "Max celltemp"
+            }
+        },
+        "meter_power.charged": {
+            "title": {
+                "en": "Charged energy",
+                "sv": "Laddad energi"
+            }
+        },
+        "meter_power.discharged": {
+            "title": {
+                "en": "Discharged energy",
+                "sv": "Urladdad energi"
+            }
+        }
+    },
+    "pair": [
+        {
+            "id": "settings"
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "next": "add_devices"
+            }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

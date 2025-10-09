@@ -1,0 +1,50 @@
+{
+    "name": {
+        "en": "EC Inverter",
+        "sv": "EC Inverter"
+    },
+    "images": {
+        "xlarge": "drivers/ecinverter/assets/images/xlarge.png",
+        "large": "drivers/ecinverter/assets/images/large.png",
+        "small": "drivers/ecinverter/assets/images/small.png"
+    },
+    "class": "solarpanel",
+    "energy": {
+        "meterPowerExportedCapability": "meter_power"
+    },
+    "capabilities": [
+        "measure_power",
+        "meter_power.daily",
+        "meter_power"
+    ],
+    "capabilitiesOptions": {
+        "meter_power.daily": {
+            "title": {
+                "en": "Daily Yield",
+                "sv": "Dagens produktion"
+            }
+        },
+        "meter_power": {
+            "title": {
+                "en": "Total Yield",
+                "sv": "Total produktion"
+            }
+        }
+    },
+    "pair": [
+        {
+            "id": "settings"
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "next": "add_devices"
+            }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

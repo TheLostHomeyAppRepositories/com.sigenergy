@@ -1,0 +1,11 @@
+{
+    "pair": {
+        "title": "Lägg till en Sigenergy enhet",
+        "nosettings": "Fyll i alla obligatoriska fält",
+        "intro": "Ange informationen för din Sigenergy enhet",
+        "address": "IP Adress",
+        "port": "Port",
+        "connect": "Koppla",
+        "connecting": "Ansluter..."
+    }
+}
