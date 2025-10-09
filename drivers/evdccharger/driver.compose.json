@@ -1,11 +1,12 @@
 {
     "name": {
-        "en": "EV DC Charger"
+        "en": "EV DC Charger",
+        "sv": "EV DC laddare"
     },
     "images": {
-        "small": "drivers/evcharger/assets/images/small.png",
-        "large": "drivers/evcharger/assets/images/large.png",
-        "xlarge": "drivers/evcharger/assets/images/xlarge.png"
+        "small": "drivers/evdccharger/assets/images/small.png",
+        "large": "drivers/evdccharger/assets/images/large.png",
+        "xlarge": "drivers/evdccharger/assets/images/xlarge.png"
     },
     "class": "evcharger",
     "platforms": [
@@ -17,7 +18,10 @@
     "energy": {
         "evCharger": true,
         "meterPowerImportedCapability": "meter_power.charged",
-        "meterPowerExportedCapability": "meter_power.discharged"
+        "meterPowerExportedCapability": "meter_power.discharged",
+        "batteries": [
+            "OTHER"
+        ]
     },
     "capabilities": [
         "evcharger_charging",

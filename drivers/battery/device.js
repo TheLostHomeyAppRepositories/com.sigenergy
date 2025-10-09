@@ -36,13 +36,37 @@ class BatteryDevice extends BaseDevice {
     }
 
     async _handlePropertiesEvent(message) {
+        const outputType = enums.decodeInverterOutputType(message.outputType);
+        this.logMessage(`Setting output type: ${outputType}`);
         try {
             await this.setSettings({
                 serial: String(message.serial),
-                capacity: String(message.capacity)
+                capacity: String(message.capacity),
+                outputType: outputType
             });
+
+            await this._configureOutputCapabilities(outputType);
         } catch (error) {
             this.error('Failed to update battery properties settings:', error);
+        }
+    }
+
+    async _configureOutputCapabilities(outputType) {
+        if (outputType == 'L1/L2/L3' || outputType == 'L1/L2/L3/N') {
+            await this.addCapabilityHelper('measure_voltage.phaseA');
+            await this.addCapabilityHelper('measure_current.phaseA');
+            await this.addCapabilityHelper('measure_voltage.phaseB');
+            await this.addCapabilityHelper('measure_current.phaseB');
+            await this.addCapabilityHelper('measure_voltage.phaseC');
+            await this.addCapabilityHelper('measure_current.phaseC');
+        } else {
+            await this.addCapabilityHelper('measure_voltage.phaseA');
+            await this.addCapabilityHelper('measure_current.phaseA');
+            await this.removeCapabilityHelper('measure_voltage.phaseB');
+            await this.removeCapabilityHelper('measure_current.phaseB');
+            await this.removeCapabilityHelper('measure_voltage.phaseC');
+            await this.removeCapabilityHelper('measure_current.phaseC');
+
         }
     }
 
@@ -55,7 +79,7 @@ class BatteryDevice extends BaseDevice {
     }
 
     async _updateBatteryProperties(message) {
-        await Promise.all([
+        let updates = [
             this._updateProperty('measure_battery', message.soc),
             this._updateProperty('measure_power', message.power),
             this._updateProperty('measure_temperature.minCell', message.minCellTemperature),
@@ -65,8 +89,26 @@ class BatteryDevice extends BaseDevice {
 
             this._updateProperty('battery_charging_state', enums.decodeBatteryChargingState(message.status, message.power)),
             this._updateProperty('meter_power.charged', message.totalChargeEnergy),
-            this._updateProperty('meter_power.discharged', message.totalDischargeEnergy),
-        ]);
+            this._updateProperty('meter_power.discharged', message.totalDischargeEnergy)
+        ];
+
+        const outputType = this.getSetting('outputType');
+
+        if (outputType == 'L1/L2/L3' || outputType == 'L1/L2/L3/N') {
+            updates.push(this._updateProperty('measure_voltage.phaseA', parseInt((message.phaseAVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_current.phaseA', message.phaseACurrent));
+            updates.push(this._updateProperty('measure_voltage.phaseB', parseInt((message.phaseBVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_current.phaseB', message.phaseBCurrent));
+            updates.push(this._updateProperty('measure_voltage.phaseC', parseInt((message.phaseCVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_current.phaseC', message.phaseCCurrent));
+
+        } else {
+            // L/N or L1/L2/N
+            updates.push(this._updateProperty('measure_voltage.phaseA', parseInt((message.phaseAVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_current.phaseA', message.phaseACurrent));
+        }
+
+        await Promise.all(updates);
     }
 }
 module.exports = BatteryDevice;

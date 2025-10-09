@@ -9,7 +9,7 @@
             {
                 "id": "address",
                 "type": "text",
-                "value": "192.168.1.n",
+                "value": "0.0.0.0",
                 "label": {
                     "en": "IP Address",
                     "sv": "IP Adress"
@@ -58,45 +58,9 @@
                     "sv": "Modbus enhets-id"
                 },
                 "hint": {
-                    "en": "The modbus unit id of the SigenStor device. Default value is 1",
-                    "sv": "Modbus enhets-id för SigenStor enheten. Standardvärdet är 1"
+                    "en": "The modbus unit id of the Sigen EV AC charger.",
+                    "sv": "Modbus enhets-id för Sigen EV AC laddare."
                 }
-            }
-        ]
-    },
-    {
-        "type": "group",
-        "label": {
-            "en": "Information",
-            "sv": "Information"
-        },
-        "children": [
-            {
-                "id": "serial",
-                "type": "label",
-                "label": {
-                    "en": "Serial",
-                    "sv": "Serienummer"
-                },
-                "value": ""
-            },
-            {
-                "id": "capacity",
-                "type": "label",
-                "label": {
-                    "en": "Capacity",
-                    "sv": "Kapacitet"
-                },
-                "value": ""
-            },
-            {
-                "id": "outputType",
-                "type": "label",
-                "label": {
-                    "en": "Output type",
-                    "sv": "Utgångstyp"
-                },
-                "value": ""
             }
         ]
     },

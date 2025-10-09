@@ -7,13 +7,14 @@
   "platforms": [
     "local"
   ],
-  "brandColor": "#00B5B1",
+  "brandColor": "#A52229",
   "name": {
     "en": "Sigenergy",
     "sv": "Sigenergy"
   },
   "description": {
-    "en": "Powering tomorrow with revolutions"
+    "en": "Home energy powered by AI",
+    "sv": "Drive ditt energisystem med AI"
   },
   "tags": {
     "en": [
@@ -45,15 +46,10 @@
     "energy"
   ],
   "images": {
-    "xlarge": "/assets/images/xlarge.jpg",
-    "large": "/assets/images/large.jpg",
-    "small": "/assets/images/small.jpg"
+    "xlarge": "/assets/images/xlarge.png",
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
   },
-  "bugs": {
-    "url": "https://github.com/ricott/homey-com.sigenergy/issues"
-  },
-  "source": "https://github.com/ricott/homey-com.sigenergy",
-  "homeyCommunityTopicId": 46219,
   "author": {
     "name": "Richard Barkestam",
     "email": "richard@barkestam.se"
@@ -93,6 +89,12 @@
         "measure_battery",
         "battery_charging_state",
         "measure_power",
+        "measure_voltage.phaseA",
+        "measure_current.phaseA",
+        "measure_voltage.phaseB",
+        "measure_current.phaseB",
+        "measure_voltage.phaseC",
+        "measure_current.phaseC",
         "measure_temperature.minCell",
         "measure_temperature.maxCell",
         "meter_power.charged",
@@ -121,6 +123,42 @@
           "title": {
             "en": "Discharged energy",
             "sv": "Urladdad energi"
+          }
+        },
+        "measure_voltage.phaseA": {
+          "title": {
+            "en": "L1 voltage",
+            "sv": "L1 spänning"
+          }
+        },
+        "measure_current.phaseA": {
+          "title": {
+            "en": "L1 current",
+            "sv": "L1 ström"
+          }
+        },
+        "measure_voltage.phaseB": {
+          "title": {
+            "en": "L2 voltage",
+            "sv": "L2 spänning"
+          }
+        },
+        "measure_current.phaseB": {
+          "title": {
+            "en": "L2 current",
+            "sv": "L2 ström"
+          }
+        },
+        "measure_voltage.phaseC": {
+          "title": {
+            "en": "L3 voltage",
+            "sv": "L3 spänning"
+          }
+        },
+        "measure_current.phaseC": {
+          "title": {
+            "en": "L3 current",
+            "sv": "L3 ström"
           }
         }
       },
@@ -231,6 +269,15 @@
                 "sv": "Kapacitet"
               },
               "value": ""
+            },
+            {
+              "id": "outputType",
+              "type": "label",
+              "label": {
+                "en": "Output type",
+                "sv": "Utgångstyp"
+              },
+              "value": ""
             }
           ]
         },
@@ -260,9 +307,9 @@
         "sv": "Elmätare"
       },
       "images": {
-        "xlarge": "drivers/energy/assets/images/xlarge.png",
-        "large": "drivers/energy/assets/images/large.png",
-        "small": "drivers/energy/assets/images/small.png"
+        "xlarge": "drivers/energy/assets/images/xlarge.jpg",
+        "large": "drivers/energy/assets/images/large.jpg",
+        "small": "drivers/energy/assets/images/small.jpg"
       },
       "class": "sensor",
       "capabilities": [
@@ -415,12 +462,151 @@
     },
     {
       "name": {
-        "en": "EV DC Charger"
+        "en": "EV AC Charger",
+        "sv": "EV AC laddare"
       },
       "images": {
-        "small": "drivers/evcharger/assets/images/small.png",
-        "large": "drivers/evcharger/assets/images/large.png",
-        "xlarge": "drivers/evcharger/assets/images/xlarge.png"
+        "small": "drivers/evaccharger/assets/images/small.png",
+        "large": "drivers/evaccharger/assets/images/large.png",
+        "xlarge": "drivers/evaccharger/assets/images/xlarge.png"
+      },
+      "class": "evcharger",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "energy": {
+        "evCharger": true,
+        "meterPowerImportedCapability": "meter_power.charged"
+      },
+      "capabilities": [
+        "evcharger_charging",
+        "evcharger_charging_state",
+        "measure_power",
+        "meter_power.charged"
+      ],
+      "capabilitiesOptions": {
+        "meter_power.charged": {
+          "title": {
+            "en": "Charged energy",
+            "sv": "Laddad energi"
+          }
+        }
+      },
+      "pair": [
+        {
+          "id": "settings"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "evaccharger",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Network",
+            "sv": "Nätverk"
+          },
+          "children": [
+            {
+              "id": "address",
+              "type": "text",
+              "value": "0.0.0.0",
+              "label": {
+                "en": "IP Address",
+                "sv": "IP Adress"
+              }
+            },
+            {
+              "id": "port",
+              "type": "number",
+              "value": 502,
+              "step": 1,
+              "label": {
+                "en": "Port",
+                "sv": "Port"
+              }
+            },
+            {
+              "id": "refreshInterval",
+              "type": "number",
+              "value": 10,
+              "step": 1,
+              "attr": {
+                "min": 5,
+                "max": 3600
+              },
+              "label": {
+                "en": "Refresh interval (seconds)",
+                "sv": "Uppdateringsfrekvens (seconds)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Modbus TCP",
+            "sv": "Modbus TCP"
+          },
+          "children": [
+            {
+              "id": "modbus_unitId",
+              "type": "number",
+              "step": 1,
+              "value": 1,
+              "label": {
+                "en": "Modbus native address",
+                "sv": "Modbus enhets-id"
+              },
+              "hint": {
+                "en": "The modbus unit id of the Sigen EV AC charger.",
+                "sv": "Modbus enhets-id för Sigen EV AC laddare."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Debug",
+            "sv": "Felsökning"
+          },
+          "children": [
+            {
+              "id": "last_error",
+              "type": "textarea",
+              "label": {
+                "en": "Most recent API error",
+                "sv": "Senaste API felmeddelandet"
+              },
+              "value": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "EV DC Charger",
+        "sv": "EV DC laddare"
+      },
+      "images": {
+        "small": "drivers/evdccharger/assets/images/small.png",
+        "large": "drivers/evdccharger/assets/images/large.png",
+        "xlarge": "drivers/evdccharger/assets/images/xlarge.png"
       },
       "class": "evcharger",
       "platforms": [
@@ -432,7 +618,10 @@
       "energy": {
         "evCharger": true,
         "meterPowerImportedCapability": "meter_power.charged",
-        "meterPowerExportedCapability": "meter_power.discharged"
+        "meterPowerExportedCapability": "meter_power.discharged",
+        "batteries": [
+          "OTHER"
+        ]
       },
       "capabilities": [
         "evcharger_charging",
@@ -593,13 +782,13 @@
     },
     {
       "name": {
-        "en": "EC Inverter",
-        "sv": "EC Inverter"
+        "en": "Inverter",
+        "sv": "Växelriktare"
       },
       "images": {
-        "xlarge": "drivers/ecinverter/assets/images/xlarge.png",
-        "large": "drivers/ecinverter/assets/images/large.png",
-        "small": "drivers/ecinverter/assets/images/small.png"
+        "xlarge": "drivers/inverter/assets/images/xlarge.png",
+        "large": "drivers/inverter/assets/images/large.png",
+        "small": "drivers/inverter/assets/images/small.png"
       },
       "class": "solarpanel",
       "energy": {

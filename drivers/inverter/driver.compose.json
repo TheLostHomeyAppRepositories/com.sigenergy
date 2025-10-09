@@ -1,12 +1,12 @@
 {
     "name": {
-        "en": "EC Inverter",
-        "sv": "EC Inverter"
+        "en": "Inverter",
+        "sv": "Växelriktare"
     },
     "images": {
-        "xlarge": "drivers/ecinverter/assets/images/xlarge.png",
-        "large": "drivers/ecinverter/assets/images/large.png",
-        "small": "drivers/ecinverter/assets/images/small.png"
+        "xlarge": "drivers/inverter/assets/images/xlarge.png",
+        "large": "drivers/inverter/assets/images/large.png",
+        "small": "drivers/inverter/assets/images/small.png"
     },
     "class": "solarpanel",
     "energy": {

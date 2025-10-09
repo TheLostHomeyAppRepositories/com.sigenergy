@@ -4,9 +4,9 @@
         "sv": "Elmätare"
     },
     "images": {
-        "xlarge": "drivers/energy/assets/images/xlarge.png",
-        "large": "drivers/energy/assets/images/large.png",
-        "small": "drivers/energy/assets/images/small.png"
+        "xlarge": "drivers/energy/assets/images/xlarge.jpg",
+        "large": "drivers/energy/assets/images/large.jpg",
+        "small": "drivers/energy/assets/images/small.jpg"
     },
     "class": "sensor",
     "capabilities": [

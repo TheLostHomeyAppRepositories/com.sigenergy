@@ -1,0 +1,52 @@
+{
+    "name": {
+        "en": "EV AC Charger",
+        "sv": "EV AC laddare"
+    },
+    "images": {
+        "small": "drivers/evaccharger/assets/images/small.png",
+        "large": "drivers/evaccharger/assets/images/large.png",
+        "xlarge": "drivers/evaccharger/assets/images/xlarge.png"
+    },
+    "class": "evcharger",
+    "platforms": [
+        "local"
+    ],
+    "connectivity": [
+        "lan"
+    ],
+    "energy": {
+        "evCharger": true,
+        "meterPowerImportedCapability": "meter_power.charged"
+    },
+    "capabilities": [
+        "evcharger_charging",
+        "evcharger_charging_state",
+        "measure_power",
+        "meter_power.charged"
+    ],
+    "capabilitiesOptions": {
+        "meter_power.charged": {
+            "title": {
+                "en": "Charged energy",
+                "sv": "Laddad energi"
+            }
+        }
+    },
+    "pair": [
+        {
+            "id": "settings"
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "next": "add_devices"
+            }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

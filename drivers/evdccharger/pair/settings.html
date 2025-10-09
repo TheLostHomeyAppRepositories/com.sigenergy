@@ -203,6 +203,7 @@
     <p><strong>Before connecting, please ensure:</strong></p>
     <ol>
         <li><strong>Enable Modbus TCP:</strong> Modbus TCP is disabled by default on Sigenergy devices. You must manually enable it</li>
+        <li><strong>Modbus native address:</strong> A value between 1 and 246</li>
         <li><strong>Network Access:</strong> Ensure your Homey can reach the Sigenergy device on the specified IP address and port (default: 502).</li>
     </ol>
 </div>
@@ -216,7 +217,7 @@
         <input type="text" class="form-control" id="port" value="502" required />
 
         <label for="modbus_unitId" data-i18n="pair.modbus_unitId">Modbus native address</label>
-        <input type="text" class="form-control" id="modbus_unitId" value="1" required />
+        <input type="text" class="form-control" id="modbus_unitId" placeholder="1-246" required />
     </div>
     
     <div class="messages">

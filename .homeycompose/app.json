@@ -4,13 +4,14 @@
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": ["local"],
-  "brandColor": "#00B5B1",
+  "brandColor": "#A52229",
   "name": {
     "en": "Sigenergy",
     "sv": "Sigenergy"
   },
   "description": {
-    "en": "Powering tomorrow with revolutions"
+    "en": "Home energy powered by AI",
+    "sv": "Drive ditt energisystem med AI"
   },
   "tags": {
     "en": [
@@ -42,15 +43,10 @@
     "energy"
   ],
   "images": {
-    "xlarge": "/assets/images/xlarge.jpg",
-    "large": "/assets/images/large.jpg",
-    "small": "/assets/images/small.jpg"
+    "xlarge": "/assets/images/xlarge.png",
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
   },
-  "bugs": {
-    "url": "https://github.com/ricott/homey-com.sigenergy/issues"
-  },
-  "source": "https://github.com/ricott/homey-com.sigenergy",
-  "homeyCommunityTopicId": 46219,
   "author": {
     "name": "Richard Barkestam",
     "email": "richard@barkestam.se"
