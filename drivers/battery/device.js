@@ -35,9 +35,15 @@ class BatteryDevice extends BaseDevice {
         this.api.on('error', this._handleErrorEvent.bind(this));
     }
 
-    _handlePropertiesEvent(message) {
-        this.updateSetting('serial', message.serial);
-        this.updateSetting('capacity', message.capacity);
+    async _handlePropertiesEvent(message) {
+        try {
+            await this.setSettings({
+                serial: String(message.serial),
+                capacity: String(message.capacity)
+            });
+        } catch (error) {
+            this.error('Failed to update battery properties settings:', error);
+        }
     }
 
     async _handleReadingsEvent(message) {

@@ -34,20 +34,31 @@ class InverterDevice extends BaseDevice {
         this.api.on('error', this._handleErrorEvent.bind(this));
     }
 
-    _handlePropertiesEvent(message) {
-        this.updateSetting('serial', message.serial);
+    async _handlePropertiesEvent(message) {
+        try {
+            await this.setSettings({
+                serial: String(message.serial),
+                mpptCount: String(message.mpptCount)
+            });
+        } catch (error) {
+            this.error('Failed to update inverter properties settings:', error);
+        }
     }
 
     async _handleReadingsEvent(message) {
         try {
             await this._updateSolarChargerProperties(message);
         } catch (error) {
-            this.error('Failed to process solar charger readings event:', error);
+            this.error('Failed to process inverter readings event:', error);
         }
     }
 
     async _updateSolarChargerProperties(message) {
         await Promise.all([
+            this._updateProperty('measure_voltage.pv1', message.pv1Voltage || 0),
+            this._updateProperty('measure_voltage.pv2', message.pv2Voltage || 0),
+            this._updateProperty('measure_voltage.pv3', message.pv3Voltage || 0),
+            this._updateProperty('measure_voltage.pv4', message.pv4Voltage || 0),
             this._updateProperty('measure_power', message.power || 0),
             this._updateProperty('meter_power.daily', message.dailyYield || 0),
             this._updateProperty('meter_power', message.totalYield || 0)

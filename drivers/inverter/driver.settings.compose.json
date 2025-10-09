@@ -79,6 +79,15 @@
                     "sv": "Serienummer"
                 },
                 "value": ""
+            },
+            {
+                "id": "mpptCount",
+                "type": "label",
+                "label": {
+                    "en": "MPPT count",
+                    "sv": "MPPT antal"
+                },
+                "value": ""
             }
         ]
     },

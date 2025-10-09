@@ -607,6 +607,10 @@
       },
       "capabilities": [
         "measure_power",
+        "measure_voltage.pv1",
+        "measure_voltage.pv2",
+        "measure_voltage.pv3",
+        "measure_voltage.pv4",
         "meter_power.daily",
         "meter_power"
       ],
@@ -621,6 +625,30 @@
           "title": {
             "en": "Total Yield",
             "sv": "Total produktion"
+          }
+        },
+        "measure_voltage.pv1": {
+          "title": {
+            "en": "PV1 Voltage",
+            "sv": "PV1 spänning"
+          }
+        },
+        "measure_voltage.pv2": {
+          "title": {
+            "en": "PV2 Voltage",
+            "sv": "PV2 spänning"
+          }
+        },
+        "measure_voltage.pv3": {
+          "title": {
+            "en": "PV3 Voltage",
+            "sv": "PV3 spänning"
+          }
+        },
+        "measure_voltage.pv4": {
+          "title": {
+            "en": "PV4 Voltage",
+            "sv": "PV4 spänning"
           }
         }
       },
@@ -720,6 +748,15 @@
               "label": {
                 "en": "Serial",
                 "sv": "Serienummer"
+              },
+              "value": ""
+            },
+            {
+              "id": "mpptCount",
+              "type": "label",
+              "label": {
+                "en": "MPPT count",
+                "sv": "MPPT antal"
               },
               "value": ""
             }
