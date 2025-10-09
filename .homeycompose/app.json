@@ -1,6 +1,6 @@
 {
   "id": "com.sigenergy",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": ["local"],
@@ -60,7 +60,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/ricott/com.sigenergy/issues"
+    "url": "https://github.com/ricott/homey-com.sigenergy/issues"
   },
-  "source": "https://github.com/ricott/com.sigenergy"
+  "source": "https://github.com/ricott/homey-com.sigenergy"
 }
