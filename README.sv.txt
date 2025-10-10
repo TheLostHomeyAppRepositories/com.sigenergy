@@ -1,4 +1,4 @@
-Ta fullständig kontroll över ditt Sigenergy energisystem med denna omfattande Homey-integration. Övervaka och automatisera din solproduktion, batterilagring, nätförbrukning och elbilsladdning—allt från en kraftfull app.
+Ta fullständig kontroll över ditt Sigenergy energisystem med denna omfattande Homey-integration. Övervaka och automatisera din solproduktion, batterilagring, nätförbrukning och elbilsladdning - allt från en kraftfull app.
 
 FULLSTÄNDIG ENERGIÖVERBLICK
 • Realtidsövervakning av ditt SigenStor batteris laddningsnivå, laddnings-/urladdningseffekt och celltemperaturer

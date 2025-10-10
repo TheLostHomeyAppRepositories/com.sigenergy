@@ -1,9 +1,11 @@
 {
   "id": "com.sigenergy",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "compatibility": ">=12.4.5",
   "sdk": 3,
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "brandColor": "#A52229",
   "name": {
     "en": "Sigenergy",
@@ -62,5 +64,6 @@
   "bugs": {
     "url": "https://github.com/ricott/homey-com.sigenergy/issues"
   },
-  "source": "https://github.com/ricott/homey-com.sigenergy"
+  "source": "https://github.com/ricott/homey-com.sigenergy",
+  "homeyCommunityTopicId": 143965
 }

@@ -1,4 +1,4 @@
-Take complete control of your Sigenergy energy ecosystem with this comprehensive Homey integration. Monitor and automate your solar production, battery storage, grid consumption, and EV charging—all from one powerful app.
+Take complete control of your Sigenergy energy ecosystem with this comprehensive Homey integration. Monitor and automate your solar production, battery storage, grid consumption, and EV charging - all from one powerful app.
 
 COMPLETE ENERGY VISIBILITY
 • Real-time monitoring of your SigenStor battery state of charge, charging/discharging power, and cell temperatures
