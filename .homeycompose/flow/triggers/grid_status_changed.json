@@ -1,0 +1,26 @@
+{
+    "id": "grid_status_changed",
+    "title": {
+        "en": "Grid status changed to",
+        "sv": "Nätstatus ändrades till"
+    },
+    "titleFormatted": {
+        "en": "Grid status changed to [[status]]",
+        "sv": "Nätstatus ändrades till [[status]]"
+    },
+    "args": [
+        {
+            "name": "status",
+            "type": "autocomplete",
+            "title": {
+                "en": "Grid status",
+                "sv": "Nätstatus"
+            }
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery"
+        }
+    ]
+}

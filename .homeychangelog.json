@@ -1,5 +1,9 @@
 {
-   "0.1.4": {
+   "0.1.5": {
+        "en": "Added grid status capability",
+        "sv": "Lade till nätstatus egenskap"
+    },
+    "0.1.4": {
         "en": "Initial version",
         "sv": "Första versionen"
     }

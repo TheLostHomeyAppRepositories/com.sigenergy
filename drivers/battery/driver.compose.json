@@ -23,6 +23,7 @@
     "capabilities": [
         "measure_battery",
         "battery_charging_state",
+        "grid_status",
         "measure_power",
         "measure_voltage.phaseA",
         "measure_current.phaseA",

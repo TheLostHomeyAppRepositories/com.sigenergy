@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Grid status",
+    "sv": "Nätstatus"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/input.svg"
+}
