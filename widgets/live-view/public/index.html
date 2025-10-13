@@ -1,0 +1,242 @@
+<html>
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0f8f0 100%);
+            overflow: hidden;
+        }
+
+        /* Dark mode background */
+        .homey-dark-mode {
+            background: #2a2d34 !important;
+        }
+
+        .homey-dark-mode body {
+            background: #2a2d34 !important;
+        }
+
+        .homey-widget {
+            margin: 0;
+            padding: 0;
+        }
+
+        .energy-system {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .house-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .house {
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            outline: none !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 395px !important;
+            width: auto !important;
+            max-width: none !important;
+            max-height: none !important;
+            min-width: 0 !important;
+            min-height: 0 !important;
+        }
+
+        /* Light mode - show house-light.png */
+        .house-light {
+            display: block !important;
+        }
+
+        .house-dark {
+            display: none !important;
+        }
+
+        /* Dark mode - show house-dark.png */
+        .homey-dark-mode .house-light {
+            display: none !important;
+        }
+
+        .homey-dark-mode .house-dark {
+            display: block !important;
+        }
+
+        .metric-container {
+            position: absolute;
+            text-align: left;
+        }
+
+        /* Battery metric */
+        .battery-metric {
+            top: 330px;
+            left: 140px;
+        }
+
+        /* Solar metric positioning */
+        .solar-metric {
+            top: 20px;
+            left: 170px;
+        }
+
+        /* EV Charger metric */
+        .charger-metric {
+            top: 330px;
+            left: 20px;
+        }
+
+        /* Home consumption metric */
+        .home-metric {
+            top: 20px;
+            left: 280px;
+        }
+
+        /* Grid metric */
+        .grid-metric {
+            top: 330px;
+            left: 280px;
+        }
+    </style>
+</head>
+
+<body class="homey-widget">
+
+    <script type="text/javascript">
+        function formatNumber(value) {
+            const numValue = parseFloat(value);
+            const decimalPlaces = Math.abs(numValue) > 9.99 ? 1 : 2;
+            return numValue.toFixed(decimalPlaces);
+        }
+        function updateMetric(id, value, unit = 'kW') {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = `${formatNumber(value)} ${unit}`;
+            }
+        }
+        function updateText(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = `${value}`.toUpperCase();
+            }
+        }
+
+        function updateBatteryStatus(id, powerValue, socValue) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = `${formatNumber(powerValue)} kW | ${formatNumber(socValue)}%`;
+            }
+        }
+
+         function updateGridPower(id, value, gridStatus) {
+             const element = document.getElementById(id);
+             if (element) {
+                 if (gridStatus && gridStatus.toLowerCase().includes('off')) {
+                     element.textContent = 'OFF GRID';
+                     element.style.color = '#ff6b6b'; // Light red color
+                 } else {
+                     element.textContent = `${formatNumber(value)} kW`;
+                     element.style.color = ''; // Reset to default color
+                 }
+             }
+         }
+
+        function updateLiveViewData(data) {
+            updateBatteryStatus('battery-status', data.battery.power, data.battery.soc);
+            updateMetric('solar-power', data.solar.power);
+            updateGridPower('grid-power', data.grid.power, data.battery.gridStatus);
+            updateMetric('charger-power', data.charger.power);
+            updateMetric('home-power', data.home.power);
+        }
+
+        function onHomeyReady(Homey) {
+
+            Homey.on('liveview.data.update', (data) => {
+                updateLiveViewData(data);
+            });
+
+            // Fetch something from your app.
+            Homey.api('GET', '/', {})
+                .then((data) => {
+                    updateLiveViewData(data);
+                })
+                .catch(err => {
+                    console.error(err);
+
+                })
+                .finally(() => {
+                    Homey.ready({
+                        height: 385,
+                        callback: () => {
+                            // Update all elements with data-i18n attributes
+                            document.querySelectorAll('[data-i18n]').forEach(element => {
+                                const key = element.getAttribute('data-i18n');
+                                element.textContent = Homey.__(key);
+                            });
+                        }
+                    });
+                });
+        }
+    </script>
+
+    <div class="energy-system">
+        <!-- House Image -->
+        <div class="house-container">
+            <img src="images/house-light.png" alt="House Light" class="house house-light"
+                style="height: 385px !important; width: auto !important;">
+            <img src="images/house-dark.png" alt="House Dark" class="house house-dark"
+                style="height: 385px !important; width: auto !important;">
+        </div>
+
+        <!-- Solar Metric -->
+        <div class="metric-container solar-metric">
+            <div class="homey-text-small" id="solar-power">N/A</div>
+            <div class="homey-text-small-light" data-i18n="widget.solar">SOLAR</div>
+        </div>
+
+        <!-- Home Consumption Metric -->
+        <div class="metric-container home-metric">
+            <div class="homey-text-small" id="home-power">N/A</div>
+            <div class="homey-text-small-light" data-i18n="widget.home">HOME</div>
+        </div>
+
+        <!-- SigenStor Metric -->
+        <div class="metric-container battery-metric">
+            <!-- <div class="homey-text-small" id="battery-power">N/A</div>
+            <div class="homey-text-small" id="battery-soc">N/A</div> -->
+            <div class="homey-text-small" id="battery-status">N/A</div>
+            <div class="homey-text-small-light" data-i18n="widget.battery">BATTERY</div>
+        </div>
+
+        <!-- Grid Metric -->
+        <div class="metric-container grid-metric">
+            <div class="homey-text-small" id="grid-power">N/A</div>
+            <div class="homey-text-small-light" data-i18n="widget.grid">GRID</div>
+        </div>
+
+        <!-- EV Charger Metric -->
+        <div class="metric-container charger-metric">
+            <div class="homey-text-small" id="charger-power">N/A</div>
+            <div class="homey-text-small-light" data-i18n="widget.evcharger">EV CHARGER</div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -7,5 +7,19 @@
         "port": "Port",
         "connect": "Connect",
         "connecting": "Connecting..."
+    },
+    "widget": {
+        "solar": "SOLAR",
+        "home": "HOME",
+        "battery": "BATTERY",
+        "grid": "GRID",
+        "evcharger": "EV CHARGER",
+        "discharging": "Discharging",
+        "charging": "Charging",
+        "importing": "Importing",
+        "exporting": "Exporting",
+        "plugged_out": "Plugged out",
+        "plugged_in": "Plugged in",
+        "inactive": "Inactive"
     }
 }  

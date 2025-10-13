@@ -1008,6 +1008,22 @@
       ]
     }
   ],
+  "widgets": {
+    "live-view": {
+      "name": {
+        "en": "Live view"
+      },
+      "height": 300,
+      "settings": [],
+      "api": {
+        "getLiveViewData": {
+          "method": "GET",
+          "path": "/"
+        }
+      },
+      "id": "live-view"
+    }
+  },
   "capabilities": {
     "grid_status": {
       "type": "string",

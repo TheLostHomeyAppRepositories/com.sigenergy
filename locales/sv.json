@@ -7,5 +7,19 @@
         "port": "Port",
         "connect": "Koppla",
         "connecting": "Ansluter..."
+    },
+    "widget": {
+        "solar": "SOL",
+        "home": "HEM",
+        "battery": "BATTERI",
+        "grid": "ELNÄT",
+        "evcharger": "LADDARE",
+        "discharging": "Urladdning",
+        "charging": "Laddning",
+        "importing": "Importerar",
+        "exporting": "Exporterar",
+        "plugged_out": "Avkopplad",
+        "plugged_in": "Ansluten",
+        "inactive": "Inaktiv"
     }
 }

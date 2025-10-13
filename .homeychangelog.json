@@ -1,4 +1,8 @@
 {
+    "0.1.6": {
+        "en": "Added live view widget",
+        "sv": "Lade till live data widget"
+    },
    "0.1.5": {
         "en": "Added grid status capability",
         "sv": "Lade till nätstatus egenskap"

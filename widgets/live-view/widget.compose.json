@@ -1,0 +1,13 @@
+{
+  "name": {
+    "en": "Live view"
+  },
+  "height": 300,
+  "settings": [],
+  "api": {
+    "getLiveViewData": {
+      "method": "GET",
+      "path": "/"
+    }
+  }
+}
