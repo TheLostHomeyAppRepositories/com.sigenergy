@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sigenergy",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -91,7 +91,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=battery"
+            "filter": "driver_id=energy"
           }
         ]
       }
@@ -123,7 +123,6 @@
       "capabilities": [
         "measure_battery",
         "battery_charging_state",
-        "grid_status",
         "measure_power",
         "measure_voltage.phaseA",
         "measure_current.phaseA",
@@ -349,6 +348,7 @@
       },
       "class": "sensor",
       "capabilities": [
+        "grid_status",
         "measure_power",
         "measure_power.L1",
         "measure_power.L2",
@@ -1013,7 +1013,7 @@
       "name": {
         "en": "Live view"
       },
-      "height": 300,
+      "height": 385,
       "settings": [],
       "api": {
         "getLiveViewData": {
@@ -1022,6 +1022,20 @@
         }
       },
       "id": "live-view"
+    },
+    "live-view-compact": {
+      "name": {
+        "en": "Live view compact"
+      },
+      "height": 155,
+      "settings": [],
+      "api": {
+        "getLiveViewData": {
+          "method": "GET",
+          "path": "/"
+        }
+      },
+      "id": "live-view-compact"
     }
   },
   "capabilities": {

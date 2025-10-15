@@ -14,7 +14,7 @@ class BatteryDevice extends BaseDevice {
     async upgradeDevice() {
         this.logMessage('Upgrading existing device');
 
-        await this.addCapabilityHelper('grid_status');
+        await this.removeCapabilityHelper('grid_status');
     }
 
     async setupSession(host, port, modbus_unitId, refreshInterval) {
@@ -81,7 +81,6 @@ class BatteryDevice extends BaseDevice {
 
     async _updateBatteryProperties(message) {
         let updates = [
-            this._updateProperty('grid_status', enums.decodeGridStatus(message.gridStatus)),
             this._updateProperty('measure_battery', message.soc),
             this._updateProperty('measure_power', message.power),
             this._updateProperty('measure_temperature.minCell', message.minCellTemperature),

@@ -2,7 +2,7 @@
 
 const Energy = require('../../lib/devices/energy.js');
 const BaseDevice = require('../baseDevice.js');
-const minGridSuplusPower = 300;
+const enums = require('../../lib/enums.js');
 
 class EnergyDevice extends BaseDevice {
 
@@ -14,6 +14,7 @@ class EnergyDevice extends BaseDevice {
     async upgradeDevice() {
         this.logMessage('Upgrading existing device');
 
+        await this.addCapabilityHelper('grid_status');
     }
 
     async setupSession(host, port, modbus_unitId, refreshInterval) {
@@ -49,6 +50,8 @@ class EnergyDevice extends BaseDevice {
 
     async _updateEnergyMeterProperties(message) {
         await Promise.all([
+            this._updateProperty('grid_status', enums.decodeGridStatus(message.gridStatus)),
+
             // Total power measurement
             this._updateProperty('measure_power', message.power),
 

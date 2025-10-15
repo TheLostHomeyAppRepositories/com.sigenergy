@@ -1,0 +1,190 @@
+<html>
+
+<head>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+            /* Space between the two items */
+            flex-wrap: wrap;
+            /* Allows items to wrap to the next line */
+        }
+
+        .item-container {
+            margin: 5px 0px;
+            /*flex: 1 1 30%;  Each item takes 30% of the width (adjust as needed) 
+            max-width: 30%;*/
+            flex: 1 1 45%;
+            max-width: 45%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+            /* column */
+            /* Ensures elements inside stack vertically */
+            align-items: center;
+            /* Center items horizontally within the container */
+            text-align: center;
+            /* Ensures text aligns in the center */
+        }
+
+        .item-container-battery {
+            margin: 5px 0px;
+            /*flex: 1 1 30%;  Each item takes 30% of the width (adjust as needed) 
+            max-width: 30%;*/
+            flex: 1 100%;
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+            /* column */
+            /* Ensures elements inside stack vertically */
+            align-items: center;
+            /* Center items horizontally within the container */
+            justify-content: center;
+            /* Center content horizontally */
+            text-align: center;
+            /* Ensures text aligns in the center */
+        }
+
+        .item-container>div:last-child,
+        .item-container-battery>div:last-child {
+            margin-left: var(--homey-su-2);
+        }
+
+        .homey-custom-icon-grid {
+            --homey-icon-size: 30px;
+
+            -webkit-mask-image: url('icons/grid.svg');
+            mask-image: url('icons/grid.svg');
+        }
+
+        .homey-custom-icon-pv {
+            --homey-icon-size: 30px;
+
+            -webkit-mask-image: url('icons/sun.svg');
+            mask-image: url('icons/sun.svg');
+        }
+
+        .homey-custom-icon-battery {
+            --homey-icon-size: 30px;
+
+            -webkit-mask-image: url('icons/battery.svg');
+            mask-image: url('icons/battery.svg');
+        }
+
+        .homey-custom-icon-load {
+            --homey-icon-size: 30px;
+
+            -webkit-mask-image: url('icons/house.svg');
+            mask-image: url('icons/house.svg');
+        }
+    </style>
+</head>
+
+<body class="homey-widget">
+
+    <script type="text/javascript">
+        function formatNumber(value) {
+            const numValue = parseFloat(value);
+            const decimalPlaces = Math.abs(numValue) > 9.99 ? 1 : 2;
+            return numValue.toFixed(decimalPlaces);
+        }
+        function updateMetric(id, value, unit = 'kW') {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = `${formatNumber(value)} ${unit}`;
+            }
+        }
+        function updateText(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = `${value}`.toUpperCase();
+            }
+        }
+
+        function updateBatteryStatus(id, powerValue, socValue) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = `${formatNumber(powerValue)} kW | ${formatNumber(socValue)}%`;
+            }
+        }
+
+        function updateGridPower(id, value, gridStatus) {
+            const element = document.getElementById(id);
+            if (element) {
+                if (gridStatus && gridStatus.toLowerCase().includes('off')) {
+                    element.textContent = 'OFF GRID';
+                    element.style.color = '#ff6b6b'; // Light red color
+                } else {
+                    element.textContent = `${formatNumber(value)} kW`;
+                    element.style.color = ''; // Reset to default color
+                }
+            }
+        }
+
+        function updateLiveViewData(data) {
+            updateBatteryStatus('battery-status', data.battery.power, data.battery.soc);
+            updateMetric('solar-power', data.solar.power);
+            updateGridPower('grid-power', data.grid.power, data.battery.gridStatus);
+            // updateMetric('charger-power', data.charger.power);
+            updateMetric('home-power', data.home.power);
+        }
+
+        function onHomeyReady(Homey) {
+
+            Homey.on('liveview.data.update', (data) => {
+                updateLiveViewData(data);
+            });
+
+            // Fetch something from your app.
+            Homey.api('GET', '/', {})
+                .then((data) => {
+                    updateLiveViewData(data);
+                })
+                .catch(err => {
+                    console.error(err);
+
+                })
+                .finally(() => {
+                    Homey.ready({
+                        callback: () => {
+                            // Update all elements with data-i18n attributes
+                            document.querySelectorAll('[data-i18n]').forEach(element => {
+                                const key = element.getAttribute('data-i18n');
+                                element.textContent = Homey.__(key);
+                            });
+                        }
+                    });
+                });
+        }
+    </script>
+
+    <div id="summary" class="container">
+        <div class="item-container">
+            <div class="homey-custom-icon-pv"></div>
+            <div id="solar-power" class="homey-text-medium"></div>
+        </div>
+        <div class="item-container">
+            <div class="homey-custom-icon-load"></div>
+            <div id="home-power" class="homey-text-medium"></div>
+        </div>
+
+        <div class="item-container-battery">
+            <div class="homey-custom-icon-battery"></div>
+            <div id="battery-status" class="homey-text-medium"></div>
+        </div>
+
+        <div class="item-container">
+            <div class="homey-custom-icon-charger"></div>
+            <div id="charger-status" class="homey-text-medium"></div>
+        </div>
+        <div class="item-container">
+            <div class="homey-custom-icon-grid"></div>
+            <div id="grid-power" class="homey-text-medium"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

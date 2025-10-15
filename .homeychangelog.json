@@ -1,9 +1,13 @@
 {
+    "0.1.7": {
+        "en": "Moved grid status capability to the energy device",
+        "sv": "Flyttade nätstatus egenskap till elmätarenheten"
+    },
     "0.1.6": {
         "en": "Added live view widget",
         "sv": "Lade till live data widget"
     },
-   "0.1.5": {
+    "0.1.5": {
         "en": "Added grid status capability",
         "sv": "Lade till nätstatus egenskap"
     },
