@@ -1,0 +1,73 @@
+{
+    "name": {
+        "en": "Plant",
+        "sv": "Anläggning"
+    },
+    "images": {
+        "xlarge": "drivers/plant/assets/images/xlarge.png",
+        "large": "drivers/plant/assets/images/large.png",
+        "small": "drivers/plant/assets/images/small.png"
+    },
+    "class": "other",
+    "energy": {
+        "batteries": [
+            "OTHER"
+        ]
+    },
+    "capabilities": [
+        "measure_power.solar",
+        "measure_power.load",
+        "measure_power.battery",
+        "measure_power.evcharger",
+        "measure_power.grid",
+        "measure_battery"
+    ],
+    "capabilitiesOptions": {
+        "measure_power.grid": {
+            "title": {
+                "en": "Grid",
+                "sv": "Elnät"
+            }
+        },
+        "measure_power.battery": {
+            "title": {
+                "en": "Battery",
+                "sv": "Batteri"
+            }
+        },
+        "measure_power.solar": {
+            "title": {
+                "en": "Solar",
+                "sv": "Solceller"
+            }
+        },
+        "measure_power.load": {
+            "title": {
+                "en": "Consumption",
+                "sv": "Förbrukning"
+            }
+        },
+        "measure_power.evcharger": {
+            "title": {
+                "en": "EV charger",
+                "sv": "EV laddare"
+            }
+        }
+    },
+    "pair": [
+        {
+            "id": "settings"
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "next": "add_devices"
+            }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

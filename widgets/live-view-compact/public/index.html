@@ -4,17 +4,23 @@
     <style>
         .container {
             display: flex;
-            justify-content: space-around;
-            /* Space between the two items */
+            /* justify-content: center; */
+            /* Center the content horizontally */
+            /* align-items: center; */
+            /* Center the content vertically */
             flex-wrap: wrap;
             /* Allows items to wrap to the next line */
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 5px 0 10px 0;
+            /* Reduced padding to eliminate scrolling */
         }
 
         .item-container {
-            margin: 5px 0px;
+            margin: 0 40px 5px 40px;
             /*flex: 1 1 30%;  Each item takes 30% of the width (adjust as needed) 
             max-width: 30%;*/
-            flex: 1 1 45%;
+            flex: 0 0 auto;
             max-width: 45%;
             box-sizing: border-box;
             display: flex;
@@ -28,7 +34,7 @@
         }
 
         .item-container-battery {
-            margin: 5px 0px;
+            margin: 10px 0px;
             /*flex: 1 1 30%;  Each item takes 30% of the width (adjust as needed) 
             max-width: 30%;*/
             flex: 1 100%;
@@ -62,8 +68,8 @@
         .homey-custom-icon-pv {
             --homey-icon-size: 30px;
 
-            -webkit-mask-image: url('icons/sun.svg');
-            mask-image: url('icons/sun.svg');
+            -webkit-mask-image: url('icons/inverter.svg');
+            mask-image: url('icons/inverter.svg');
         }
 
         .homey-custom-icon-battery {
@@ -78,6 +84,61 @@
 
             -webkit-mask-image: url('icons/house.svg');
             mask-image: url('icons/house.svg');
+        }
+
+        .homey-custom-icon-evcharger {
+            --homey-icon-size: 30px;
+
+            -webkit-mask-image: url('icons/evcharger.svg');
+            mask-image: url('icons/evcharger.svg');
+        }
+
+        /* Error container */
+        .error-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 20px;
+            color: #ff6b6b;
+            font-weight: 600;
+            max-width: 300px;
+            word-wrap: break-word;
+            margin: 0 auto;
+        }
+
+        .homey-dark-mode .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        /* Hide scrollbars */
+        * {
+            overflow: hidden;
+        }
+        
+        html, body {
+            overflow: hidden !important;
+            height: 100%;
+        }
+        
+        .homey-widget {
+            overflow: hidden !important;
+            height: 100%;
+        }
+        
+        .container {
+            overflow: hidden;
         }
     </style>
 </head>
@@ -124,11 +185,49 @@
         }
 
         function updateLiveViewData(data) {
+            // Check if there's an error (no Plant device)
+            if (data.error) {
+                showError(data.error);
+                return;
+            }
+            
+            // Clear any existing error display
+            hideError();
+            
             updateBatteryStatus('battery-status', data.battery.power, data.battery.soc);
             updateMetric('solar-power', data.solar.power);
-            updateGridPower('grid-power', data.grid.power, data.battery.gridStatus);
-            // updateMetric('charger-power', data.charger.power);
+            updateGridPower('grid-power', data.grid.power, data.grid.status);
+            updateMetric('ev-charger-power', data.evcharger.power);
             updateMetric('home-power', data.home.power);
+        }
+
+        function showError(errorMessage) {
+            // Hide the main container
+            const summaryContainer = document.getElementById('summary');
+            if (summaryContainer) {
+                summaryContainer.style.display = 'none';
+            }
+            
+            // Show error message
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'block';
+                document.getElementById('error-message').textContent = errorMessage;
+            }
+        }
+
+        function hideError() {
+            // Show the main container
+            const summaryContainer = document.getElementById('summary');
+            if (summaryContainer) {
+                summaryContainer.style.display = 'flex';
+            }
+            
+            // Hide error message
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
         }
 
         function onHomeyReady(Homey) {
@@ -160,6 +259,13 @@
         }
     </script>
 
+    <!-- Error Container -->
+    <div class="error-container" id="error-container">
+        <div class="error-message" id="error-message">
+            The widget requires a Sigenergy Plant device
+        </div>
+    </div>
+
     <div id="summary" class="container">
         <div class="item-container">
             <div class="homey-custom-icon-pv"></div>
@@ -176,8 +282,8 @@
         </div>
 
         <div class="item-container">
-            <div class="homey-custom-icon-charger"></div>
-            <div id="charger-status" class="homey-text-medium"></div>
+            <div class="homey-custom-icon-evcharger"></div>
+            <div id="ev-charger-power" class="homey-text-medium"></div>
         </div>
         <div class="item-container">
             <div class="homey-custom-icon-grid"></div>

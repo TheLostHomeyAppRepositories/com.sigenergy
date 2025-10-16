@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #e8f4fd 0%, #f0f8f0 100%);
+            background: linear-gradient(135deg, #dcf2f6 0%, #f5f7fd 100%);
             overflow: hidden;
         }
 
@@ -98,7 +98,7 @@
         }
 
         /* EV Charger metric */
-        .charger-metric {
+        .ev-charger-metric {
             top: 330px;
             left: 20px;
         }
@@ -106,13 +106,40 @@
         /* Home consumption metric */
         .home-metric {
             top: 20px;
-            left: 280px;
+            left: 290px;
         }
 
         /* Grid metric */
         .grid-metric {
             top: 330px;
-            left: 280px;
+            left: 290px;
+        }
+
+        /* Error container */
+        .error-container {
+            position: absolute;
+            top: 190px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+            z-index: 10;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 20px;
+            color: #ff6b6b;
+            font-weight: 600;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        .homey-dark-mode .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
         }
     </style>
 </head>
@@ -159,11 +186,47 @@
          }
 
         function updateLiveViewData(data) {
+            // Check if there's an error (no Plant device)
+            if (data.error) {
+                showError(data.error);
+                return;
+            }
+            
+            // Clear any existing error display
+            hideError();
+            
             updateBatteryStatus('battery-status', data.battery.power, data.battery.soc);
             updateMetric('solar-power', data.solar.power);
-            updateGridPower('grid-power', data.grid.power, data.battery.gridStatus);
-            updateMetric('charger-power', data.charger.power);
+            updateGridPower('grid-power', data.grid.power, data.grid.status);
+            updateMetric('ev-charger-power', data.evcharger.power);
             updateMetric('home-power', data.home.power);
+        }
+
+        function showError(errorMessage) {
+            // Hide all metric containers
+            document.querySelectorAll('.metric-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // Show error message
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'block';
+                document.getElementById('error-message').textContent = errorMessage;
+            }
+        }
+
+        function hideError() {
+            // Show all metric containers
+            document.querySelectorAll('.metric-container').forEach(container => {
+                container.style.display = 'block';
+            });
+            
+            // Hide error message
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
         }
 
         function onHomeyReady(Homey) {
@@ -196,6 +259,13 @@
     </script>
 
     <div class="energy-system">
+        <!-- Error Container -->
+        <div class="error-container" id="error-container">
+            <div class="error-message" id="error-message">
+                The widget requires a Sigenergy Plant device
+            </div>
+        </div>
+
         <!-- House Image -->
         <div class="house-container">
             <img src="images/house-light.png" alt="House Light" class="house house-light"
@@ -231,8 +301,8 @@
         </div>
 
         <!-- EV Charger Metric -->
-        <div class="metric-container charger-metric">
-            <div class="homey-text-small" id="charger-power">N/A</div>
+        <div class="metric-container ev-charger-metric">
+            <div class="homey-text-small" id="ev-charger-power">N/A</div>
             <div class="homey-text-small-light" data-i18n="widget.evcharger">EV CHARGER</div>
         </div>
     </div>

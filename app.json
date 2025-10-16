@@ -1006,6 +1006,165 @@
           ]
         }
       ]
+    },
+    {
+      "name": {
+        "en": "Plant",
+        "sv": "Anläggning"
+      },
+      "images": {
+        "xlarge": "drivers/plant/assets/images/xlarge.png",
+        "large": "drivers/plant/assets/images/large.png",
+        "small": "drivers/plant/assets/images/small.png"
+      },
+      "class": "other",
+      "energy": {
+        "batteries": [
+          "OTHER"
+        ]
+      },
+      "capabilities": [
+        "measure_power.solar",
+        "measure_power.load",
+        "measure_power.battery",
+        "measure_power.evcharger",
+        "measure_power.grid",
+        "measure_battery"
+      ],
+      "capabilitiesOptions": {
+        "measure_power.grid": {
+          "title": {
+            "en": "Grid",
+            "sv": "Elnät"
+          }
+        },
+        "measure_power.battery": {
+          "title": {
+            "en": "Battery",
+            "sv": "Batteri"
+          }
+        },
+        "measure_power.solar": {
+          "title": {
+            "en": "Solar",
+            "sv": "Solceller"
+          }
+        },
+        "measure_power.load": {
+          "title": {
+            "en": "Consumption",
+            "sv": "Förbrukning"
+          }
+        },
+        "measure_power.evcharger": {
+          "title": {
+            "en": "EV charger",
+            "sv": "EV laddare"
+          }
+        }
+      },
+      "pair": [
+        {
+          "id": "settings"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "plant",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Network",
+            "sv": "Nätverk"
+          },
+          "children": [
+            {
+              "id": "address",
+              "type": "text",
+              "value": "0.0.0.0",
+              "label": {
+                "en": "IP Address",
+                "sv": "IP Adress"
+              }
+            },
+            {
+              "id": "port",
+              "type": "number",
+              "value": 502,
+              "step": 1,
+              "label": {
+                "en": "Port",
+                "sv": "Port"
+              }
+            },
+            {
+              "id": "refreshInterval",
+              "type": "number",
+              "value": 10,
+              "step": 1,
+              "attr": {
+                "min": 5,
+                "max": 3600
+              },
+              "label": {
+                "en": "Refresh interval (seconds)",
+                "sv": "Uppdateringsfrekvens (seconds)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Modbus TCP",
+            "sv": "Modbus TCP"
+          },
+          "children": [
+            {
+              "id": "modbus_unitId",
+              "type": "number",
+              "step": 1,
+              "value": 247,
+              "label": {
+                "en": "Modbus native address",
+                "sv": "Modbus enhets-id"
+              },
+              "hint": {
+                "en": "The modbus unit id of the plant device. Value is 247",
+                "sv": "Modbus enhets-id för systemet. Standardvärdet är 247"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Debug",
+            "sv": "Felsökning"
+          },
+          "children": [
+            {
+              "id": "last_error",
+              "type": "textarea",
+              "label": {
+                "en": "Most recent API error",
+                "sv": "Senaste API felmeddelandet"
+              },
+              "value": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "widgets": {
