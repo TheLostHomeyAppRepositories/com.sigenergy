@@ -16,7 +16,8 @@
         "measure_power.L2",
         "measure_power.L3",
         "meter_power.imported",
-        "meter_power.exported"
+        "meter_power.exported",
+        "independent_phase_control"
     ],
     "capabilitiesOptions": {
         "measure_power.L1": {

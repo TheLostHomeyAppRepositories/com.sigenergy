@@ -1,0 +1,10 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Independent phase control",
+    "sv": "Individuell fasstyrning"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": null
+}
