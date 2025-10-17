@@ -4,93 +4,95 @@
     <style>
         .container {
             display: flex;
-            /* justify-content: center; */
-            /* Center the content horizontally */
-            /* align-items: center; */
-            /* Center the content vertically */
-            flex-wrap: wrap;
-            /* Allows items to wrap to the next line */
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 5px 0 10px 0;
-            /* Reduced padding to eliminate scrolling */
-        }
-
-        .item-container {
-            margin: 0 40px 5px 40px;
-            /*flex: 1 1 30%;  Each item takes 30% of the width (adjust as needed) 
-            max-width: 30%;*/
-            flex: 0 0 auto;
-            max-width: 45%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: row;
-            /* column */
-            /* Ensures elements inside stack vertically */
-            align-items: center;
-            /* Center items horizontally within the container */
-            text-align: center;
-            /* Ensures text aligns in the center */
-        }
-
-        .item-container-battery {
-            margin: 10px 0px;
-            /*flex: 1 1 30%;  Each item takes 30% of the width (adjust as needed) 
-            max-width: 30%;*/
-            flex: 1 100%;
-            max-width: 100%;
+            flex-direction: column;
             width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 5px 0 10px 0;
             box-sizing: border-box;
-            display: flex;
-            flex-direction: row;
-            /* column */
-            /* Ensures elements inside stack vertically */
-            align-items: center;
-            /* Center items horizontally within the container */
-            justify-content: center;
-            /* Center content horizontally */
-            text-align: center;
-            /* Ensures text aligns in the center */
         }
 
-        .item-container>div:last-child,
-        .item-container-battery>div:last-child {
-            margin-left: var(--homey-su-2);
+        .row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 5px;
+            box-sizing: border-box;
         }
+
+        .cell {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 2px;
+            min-width: 0;
+        }
+
+        .cell-50 {
+            width: 50%;
+            flex: 0 0 50%;
+        }
+
+        .cell-100 {
+            width: 100%;
+            flex: 0 0 100%;
+        }
+
+        .cell-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-width: 0;
+        }
+
 
         .homey-custom-icon-grid {
-            --homey-icon-size: 30px;
-
             -webkit-mask-image: url('icons/grid.svg');
             mask-image: url('icons/grid.svg');
         }
 
         .homey-custom-icon-pv {
-            --homey-icon-size: 30px;
-
             -webkit-mask-image: url('icons/inverter.svg');
             mask-image: url('icons/inverter.svg');
         }
 
         .homey-custom-icon-battery {
-            --homey-icon-size: 30px;
-
             -webkit-mask-image: url('icons/battery.svg');
             mask-image: url('icons/battery.svg');
         }
 
         .homey-custom-icon-load {
-            --homey-icon-size: 30px;
-
             -webkit-mask-image: url('icons/house.svg');
             mask-image: url('icons/house.svg');
         }
 
         .homey-custom-icon-evcharger {
-            --homey-icon-size: 30px;
-
             -webkit-mask-image: url('icons/evcharger.svg');
             mask-image: url('icons/evcharger.svg');
+        }
+
+        /* Responsive text sizing */
+        .cell-content .homey-text-medium {
+            font-size: clamp(14px, 2.5vw, 20px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            margin-left: 10px;
+        }
+
+        /* Icon sizing */
+        .cell-content .homey-custom-icon-pv,
+        .cell-content .homey-custom-icon-load,
+        .cell-content .homey-custom-icon-battery,
+        .cell-content .homey-custom-icon-evcharger,
+        .cell-content .homey-custom-icon-grid {
+            --homey-icon-size: clamp(24px, 5vw, 36px);
+            flex-shrink: 0;
         }
 
         /* Error container */
@@ -267,27 +269,46 @@
     </div>
 
     <div id="summary" class="container">
-        <div class="item-container">
-            <div class="homey-custom-icon-pv"></div>
-            <div id="solar-power" class="homey-text-medium"></div>
-        </div>
-        <div class="item-container">
-            <div class="homey-custom-icon-load"></div>
-            <div id="home-power" class="homey-text-medium"></div>
+        <!-- Row 1: Solar Panel and House -->
+        <div class="row">
+            <div class="cell cell-50">
+                <div class="cell-content">
+                    <div class="homey-custom-icon-pv"></div>
+                    <div id="solar-power" class="homey-text-medium"></div>
+                </div>
+            </div>
+            <div class="cell cell-50">
+                <div class="cell-content">
+                    <div class="homey-custom-icon-load"></div>
+                    <div id="home-power" class="homey-text-medium"></div>
+                </div>
+            </div>
         </div>
 
-        <div class="item-container-battery">
-            <div class="homey-custom-icon-battery"></div>
-            <div id="battery-status" class="homey-text-medium"></div>
+        <!-- Row 2: Battery (spans full width) -->
+        <div class="row">
+            <div class="cell cell-100">
+                <div class="cell-content">
+                    <div class="homey-custom-icon-battery"></div>
+                    <div id="battery-status" class="homey-text-medium"></div>
+                </div>
+            </div>
         </div>
 
-        <div class="item-container">
-            <div class="homey-custom-icon-evcharger"></div>
-            <div id="ev-charger-power" class="homey-text-medium"></div>
-        </div>
-        <div class="item-container">
-            <div class="homey-custom-icon-grid"></div>
-            <div id="grid-power" class="homey-text-medium"></div>
+        <!-- Row 3: EV Charger and Grid -->
+        <div class="row">
+            <div class="cell cell-50">
+                <div class="cell-content">
+                    <div class="homey-custom-icon-evcharger"></div>
+                    <div id="ev-charger-power" class="homey-text-medium"></div>
+                </div>
+            </div>
+            <div class="cell cell-50">
+                <div class="cell-content">
+                    <div class="homey-custom-icon-grid"></div>
+                    <div id="grid-power" class="homey-text-medium"></div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -1186,7 +1186,7 @@
       "name": {
         "en": "Live view compact"
       },
-      "height": 155,
+      "height": 140,
       "settings": [],
       "api": {
         "getLiveViewData": {
