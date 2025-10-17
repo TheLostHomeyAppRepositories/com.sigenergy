@@ -33,7 +33,8 @@
         "measure_temperature.minCell",
         "measure_temperature.maxCell",
         "meter_power.charged",
-        "meter_power.discharged"
+        "meter_power.discharged",
+        "firmware"
     ],
     "capabilitiesOptions": {
         "measure_temperature.minCell": {

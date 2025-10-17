@@ -1,0 +1,10 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Firmware",
+    "sv": "Firmware"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": null
+}

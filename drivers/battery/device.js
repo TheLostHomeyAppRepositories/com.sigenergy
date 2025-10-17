@@ -15,6 +15,7 @@ class BatteryDevice extends BaseDevice {
         this.logMessage('Upgrading existing device');
 
         await this.removeCapabilityHelper('grid_status');
+        await this.addCapabilityHelper('firmware');
     }
 
     async setupSession(host, port, modbus_unitId, refreshInterval) {
@@ -90,7 +91,8 @@ class BatteryDevice extends BaseDevice {
 
             this._updateProperty('battery_charging_state', enums.decodeBatteryChargingState(message.status, message.power)),
             this._updateProperty('meter_power.charged', message.totalChargeEnergy),
-            this._updateProperty('meter_power.discharged', message.totalDischargeEnergy)
+            this._updateProperty('meter_power.discharged', message.totalDischargeEnergy),
+            this._updateProperty('firmware', message.firmware)
         ];
 
         const outputType = this.getSetting('outputType');
