@@ -1,5 +1,5 @@
 {
-  "type": "boolean",
+  "type": "string",
   "title": {
     "en": "Independent phase control",
     "sv": "Individuell fasstyrning"

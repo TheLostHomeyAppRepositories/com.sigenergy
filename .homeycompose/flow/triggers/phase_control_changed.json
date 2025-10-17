@@ -1,0 +1,26 @@
+{
+    "id": "phase_control_changed",
+    "title": {
+        "en": "Independent phase control changed to",
+        "sv": "Individuell fasstyrning ändrades till"
+    },
+    "titleFormatted": {
+        "en": "Independent phase control changed to [[control]]",
+        "sv": "Individuell fasstyrning ändrades till [[control]]"
+    },
+    "args": [
+        {
+            "name": "control",
+            "type": "autocomplete",
+            "title": {
+                "en": "Phase control",
+                "sv": "Fasstyrning"
+            }
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=energy"
+        }
+    ]
+}

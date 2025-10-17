@@ -1,0 +1,31 @@
+{
+    "id": "firmware_changed",
+    "title": {
+        "en": "Firmware changed",
+        "sv": "Firmware ändrades"
+    },
+    "titleFormatted": {
+        "en": "Firmware changed",
+        "sv": "Firmware ändrades"
+    },
+    "tokens": [
+        {
+            "name": "firmware",
+            "type": "string",
+            "title": {
+                "en": "Firmware version",
+                "sv": "Firmware version"
+            },
+            "example": {
+                "en": "V100R001C21SPC111B101D"
+            }
+        }
+    ],
+    "args": [
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery"
+        }
+    ]
+}

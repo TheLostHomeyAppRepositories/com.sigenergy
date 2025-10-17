@@ -70,6 +70,37 @@
   "flow": {
     "triggers": [
       {
+        "id": "firmware_changed",
+        "title": {
+          "en": "Firmware changed",
+          "sv": "Firmware ändrades"
+        },
+        "titleFormatted": {
+          "en": "Firmware changed",
+          "sv": "Firmware ändrades"
+        },
+        "tokens": [
+          {
+            "name": "firmware",
+            "type": "string",
+            "title": {
+              "en": "Firmware version",
+              "sv": "Firmware version"
+            },
+            "example": {
+              "en": "V100R001C21SPC111B101D"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery"
+          }
+        ]
+      },
+      {
         "id": "grid_status_changed",
         "title": {
           "en": "Grid status changed to",
@@ -86,6 +117,32 @@
             "title": {
               "en": "Grid status",
               "sv": "Nätstatus"
+            }
+          },
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=energy"
+          }
+        ]
+      },
+      {
+        "id": "phase_control_changed",
+        "title": {
+          "en": "Independent phase control changed to",
+          "sv": "Individuell fasstyrning ändrades till"
+        },
+        "titleFormatted": {
+          "en": "Independent phase control changed to [[control]]",
+          "sv": "Individuell fasstyrning ändrades till [[control]]"
+        },
+        "args": [
+          {
+            "name": "control",
+            "type": "autocomplete",
+            "title": {
+              "en": "Phase control",
+              "sv": "Fasstyrning"
             }
           },
           {
@@ -356,7 +413,7 @@
         "measure_power.L3",
         "meter_power.imported",
         "meter_power.exported",
-        "independent_phase_control"
+        "phase_control"
       ],
       "capabilitiesOptions": {
         "measure_power.L1": {
@@ -1221,8 +1278,8 @@
       "uiComponent": "sensor",
       "icon": "/assets/input.svg"
     },
-    "independent_phase_control": {
-      "type": "boolean",
+    "phase_control": {
+      "type": "string",
       "title": {
         "en": "Independent phase control",
         "sv": "Individuell fasstyrning"

@@ -15,7 +15,7 @@ class EnergyDevice extends BaseDevice {
         this.logMessage('Upgrading existing device');
 
         await this.addCapabilityHelper('grid_status');
-        await this.addCapabilityHelper('independent_phase_control');
+        await this.addCapabilityHelper('phase_control');
     }
 
     async setupSession(host, port, modbus_unitId, refreshInterval) {
@@ -76,9 +76,8 @@ class EnergyDevice extends BaseDevice {
             this._updateProperty('meter_power.exported', message.totalExportedEnergy || 0),
 
             // Independent phase control
-            this._updateProperty('independent_phase_control', message.independentPhaseControl == 1)
+            this._updateProperty('phase_control', enums.decodePhaseControl(message.phaseControl))
         ]);
     }
-
 }
 module.exports = EnergyDevice;

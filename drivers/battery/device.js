@@ -92,7 +92,7 @@ class BatteryDevice extends BaseDevice {
             this._updateProperty('battery_charging_state', enums.decodeBatteryChargingState(message.status, message.power)),
             this._updateProperty('meter_power.charged', message.totalChargeEnergy),
             this._updateProperty('meter_power.discharged', message.totalDischargeEnergy),
-            this._updateProperty('firmware', message.firmware)
+            this._updateProperty('firmware', (message.firmware || '').trim())
         ];
 
         const outputType = this.getSetting('outputType');
