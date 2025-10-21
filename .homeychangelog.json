@@ -1,4 +1,8 @@
 {
+    "0.1.8": {
+        "en": "Added firmware and independent phase control capabilities, including triggers.",
+        "sv": "Lade till firmware och fasstyrning egenskaper, inklusive triggers."
+    },
     "0.1.7": {
         "en": "Moved grid status capability to the energy device",
         "sv": "Flyttade nätstatus egenskap till elmätarenheten"
