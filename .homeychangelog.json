@@ -1,5 +1,5 @@
 {
-    "0.1.8": {
+    "0.1.9": {
         "en": "Added firmware and independent phase control capabilities, including triggers.",
         "sv": "Lade till firmware och fasstyrning egenskaper, inklusive triggers."
     },

@@ -172,23 +172,25 @@ class BaseDevice extends Device {
         }
     }
 
-    updateSetting(key, value) {
-        let obj = {};
-        obj[key] = String(value);
-        this.setSettings(obj).catch(err => {
+    async updateSetting(key, value) {
+        try {
+            const obj = {};
+            obj[key] = String(value);
+            await this.setSettings(obj);
+        } catch (err) {
             this.error(`Failed to update setting '${key}' with value '${value}'`, err);
-        });
-    }
-
-    updateSettingIfChanged(key, newValue, oldValue) {
-        if (newValue != oldValue) {
-            this.updateSetting(key, newValue);
         }
     }
 
-    updateNumericSettingIfChanged(key, newValue, oldValue, suffix) {
+    async updateSettingIfChanged(key, newValue, oldValue) {
+        if (newValue != oldValue) {
+            await this.updateSetting(key, newValue);
+        }
+    }
+
+    async updateNumericSettingIfChanged(key, newValue, oldValue, suffix) {
         if (!isNaN(newValue)) {
-            this.updateSettingIfChanged(key, `${newValue}${suffix}`, `${oldValue}${suffix}`);
+            await this.updateSettingIfChanged(key, `${newValue}${suffix}`, `${oldValue}${suffix}`);
         }
     }
 

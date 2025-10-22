@@ -81,6 +81,7 @@ class BatteryDevice extends BaseDevice {
     }
 
     async _updateBatteryProperties(message) {
+        const firmware = (message.firmware || '').trim();
         let updates = [
             this._updateProperty('measure_battery', message.soc),
             this._updateProperty('measure_power', message.power),
@@ -92,7 +93,7 @@ class BatteryDevice extends BaseDevice {
             this._updateProperty('battery_charging_state', enums.decodeBatteryChargingState(message.status, message.power)),
             this._updateProperty('meter_power.charged', message.totalChargeEnergy),
             this._updateProperty('meter_power.discharged', message.totalDischargeEnergy),
-            this._updateProperty('firmware', (message.firmware || '').trim())
+            this._updateProperty('firmware', firmware)
         ];
 
         const outputType = this.getSetting('outputType');
@@ -112,6 +113,9 @@ class BatteryDevice extends BaseDevice {
         }
 
         await Promise.all(updates);
+
+        // Update firmware setting if changed
+        await this.updateSettingIfChanged('firmware', firmware, this.getSetting('firmware'));
     }
 }
 module.exports = BatteryDevice;

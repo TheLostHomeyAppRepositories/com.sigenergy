@@ -67,6 +67,24 @@
     {
         "type": "group",
         "label": {
+            "en": "Information",
+            "sv": "Information"
+        },
+        "children": [
+            {
+                "id": "phaseControl",
+                "type": "label",
+                "label": {
+                    "en": "Independent phase control",
+                    "sv": "Individuell fasstyrning"
+                },
+                "value": ""
+            }
+        ]
+    },
+    {
+        "type": "group",
+        "label": {
             "en": "Debug",
             "sv": "Felsökning"
         },

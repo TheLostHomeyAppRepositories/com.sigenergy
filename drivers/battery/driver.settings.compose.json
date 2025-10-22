@@ -81,6 +81,15 @@
                 "value": ""
             },
             {
+                "id": "firmware",
+                "type": "label",
+                "label": {
+                    "en": "Firmware",
+                    "sv": "Firmware"
+                },
+                "value": ""
+            },
+            {
                 "id": "capacity",
                 "type": "label",
                 "label": {
