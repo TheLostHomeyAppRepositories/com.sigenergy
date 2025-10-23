@@ -5,8 +5,16 @@
         "intro": "Enter the details of your Sigenergy device",
         "address": "IP Address",
         "port": "Port",
+        "modbus_unitId": "Modbus native address",
         "connect": "Connect",
-        "connecting": "Connecting..."
+        "connecting": "Connecting...",
+        "setup_instructions": "Setup Instructions",
+        "setup_ensure": "Before connecting, please ensure:",
+        "setup_step1": "<strong>Enable Modbus TCP:</strong> Modbus TCP is disabled by default on Sigenergy devices. You must manually enable it",
+        "setup_step2": "<strong>Find the IP address:</strong> The IP address of your Sigenergy device can be found in the Sigenergy app, under the System tab / System settings / Connectivity / Device tab / Ethernet or WLAN",
+        "setup_step3": "<strong>Modbus native address:</strong> A value between 1 and 246. Normally the value is 1, assuming you have one Sigenergy device.",
+        "setup_step3_fixed247": "<strong>Modbus native address:</strong> Do not change this value, it must be 247",
+        "setup_step4": "<strong>Network Access:</strong> Ensure your Homey can reach the Sigenergy device on the specified IP address and port (default: 502)."
     },
     "widget": {
         "solar": "SOLAR",

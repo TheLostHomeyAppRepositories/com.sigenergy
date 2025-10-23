@@ -1,7 +1,7 @@
 {
     "name": {
         "en": "Plant",
-        "sv": "Anläggning"
+        "sv": "System"
     },
     "images": {
         "xlarge": "drivers/plant/assets/images/xlarge.png",

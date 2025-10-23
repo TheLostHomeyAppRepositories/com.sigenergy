@@ -4,6 +4,14 @@
         // Auto-focus on the address field when page loads
         $('#address').focus();
         
+        // Localize instructions
+        $('#instructions-title').html('<i class="fa fa-info-circle"></i>' + __('pair.setup_instructions'));
+        $('#instructions-ensure').html(__('pair.setup_ensure'));
+        $('#instructions-step1').html(__('pair.setup_step1'));
+        $('#instructions-step2').html(__('pair.setup_step2'));
+        $('#instructions-step3').html(__('pair.setup_step3'));
+        $('#instructions-step4').html(__('pair.setup_step4'));
+        
         $('#connect').click(function () {
             $('.gx-error').hide();
             var inputaddress = $('#address').val();
@@ -199,12 +207,13 @@
 </style>
 
 <div class="instructions">
-    <h3><i class="fa fa-info-circle"></i>Setup Instructions</h3>
-    <p><strong>Before connecting, please ensure:</strong></p>
+    <h3 id="instructions-title"></h3>
+    <p id="instructions-ensure"></p>
     <ol>
-        <li><strong>Enable Modbus TCP:</strong> Modbus TCP is disabled by default on Sigenergy devices. You must manually enable it</li>
-        <li><strong>Modbus native address:</strong> A value between 1 and 246. Normally the value is 1, assuming you have one Sigenergy device.</li>
-        <li><strong>Network Access:</strong> Ensure your Homey can reach the Sigenergy device on the specified IP address and port (default: 502).</li>
+        <li id="instructions-step1"></li>
+        <li id="instructions-step2"></li>
+        <li id="instructions-step3"></li>
+        <li id="instructions-step4"></li>
     </ol>
 </div>
 
