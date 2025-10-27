@@ -35,8 +35,7 @@ class EvDCChargerDevice extends BaseDevice {
                 await this.api.startCharging()
                     .catch(reason => {
                         this.error('Failed to start charging!', reason);
-                        let defaultMsg = 'Failed to start charging!';
-                        return Promise.reject(new Error(`${defaultMsg} ${reason.message}`));
+                        throw new Error(`Failed to start charging! ${reason.message}`);
                     });
 
             } else {
@@ -44,8 +43,7 @@ class EvDCChargerDevice extends BaseDevice {
                 await this.api.stopCharging()
                     .catch(reason => {
                         this.error('Failed to stop charging!', reason);
-                        let defaultMsg = 'Failed to stop charging!';
-                        return Promise.reject(new Error(`${defaultMsg} ${reason.message}`));
+                        throw new Error(`Failed to stop charging! ${reason.message}`);
                     });
             }
         });
