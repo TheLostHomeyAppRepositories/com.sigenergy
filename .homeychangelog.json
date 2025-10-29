@@ -1,4 +1,8 @@
 {
+    "0.2.1": {
+        "en": "Added PCS temperature capability",
+        "sv": "Lade till PCS temperatur egenskapen"
+    },
     "0.2.0": {
         "en": "Added instructions for pairing",
         "sv": "Lade till instruktioner för pairing"

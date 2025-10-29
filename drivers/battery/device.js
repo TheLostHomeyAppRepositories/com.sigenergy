@@ -16,6 +16,7 @@ class BatteryDevice extends BaseDevice {
 
         await this.removeCapabilityHelper('grid_status');
         await this.addCapabilityHelper('firmware');
+        await this.addCapabilityHelper('measure_temperature.pcs');
     }
 
     async setupSession(host, port, modbus_unitId, refreshInterval) {
@@ -87,6 +88,7 @@ class BatteryDevice extends BaseDevice {
             this._updateProperty('measure_power', message.power),
             this._updateProperty('measure_temperature.minCell', message.minCellTemperature),
             this._updateProperty('measure_temperature.maxCell', message.maxCellTemperature),
+            this._updateProperty('measure_temperature.pcs', message.pcsTemperature),
             // this._updateProperty('measure_voltage.minCell', message.minCellVoltage),
             // this._updateProperty('measure_voltage.maxCell', message.maxCellVoltage),
 

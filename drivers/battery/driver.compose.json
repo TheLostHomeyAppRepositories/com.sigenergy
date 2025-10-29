@@ -32,6 +32,7 @@
         "measure_current.phaseC",
         "measure_temperature.minCell",
         "measure_temperature.maxCell",
+        "measure_temperature.pcs",
         "meter_power.charged",
         "meter_power.discharged",
         "firmware"
@@ -47,6 +48,12 @@
             "title": {
                 "en": "Max cell temp",
                 "sv": "Max celltemp"
+            }
+        },
+        "measure_temperature.pcs": {
+            "title": {
+                "en": "PCS temperature",
+                "sv": "PCS temperatur"
             }
         },
         "meter_power.charged": {

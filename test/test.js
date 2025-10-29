@@ -4,7 +4,7 @@ var modbus = require('jsmodbus');
 var net = require('net');
 
 let socket = new net.Socket();
-let client100 = new modbus.client.TCP(socket, 247, 5000);
+let client100 = new modbus.client.TCP(socket, 1, 5000);
 let options = {
     host: "192.168.200.66",
     port: 502,
@@ -15,7 +15,7 @@ socket.on('connect', function () {
     let startTime = new Date().getTime();
     Promise.all([
 
-        client100.readHoldingRegisters(40042, 2),
+        client100.readHoldingRegisters(31003, 1),
 
 
     ]).then((results) => {
@@ -25,8 +25,8 @@ socket.on('connect', function () {
             let result = results[index];
 
             //console.log(result.response);
-            //console.log(result.response._body._valuesAsBuffer.readUInt16BE(0));
-            console.log(result.response._body._valuesAsBuffer.readUInt32BE(0));
+            console.log(result.response._body._valuesAsBuffer.readUInt16BE(0));
+            //console.log(result.response._body._valuesAsBuffer.readUInt32BE(0));
 
         }
 
