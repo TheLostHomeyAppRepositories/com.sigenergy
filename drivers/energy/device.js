@@ -52,11 +52,8 @@ class EnergyDevice extends BaseDevice {
     async _updateEnergyMeterProperties(message) {
 
         const phaseControl = enums.decodePhaseControl(message.phaseControl);
-        const gridStatus = enums.decodeGridStatus(message.gridStatus);
 
-        await Promise.all([
-            this._updateProperty('grid_status', gridStatus),
-
+        const propertyUpdates = [
             // Total power measurement
             this._updateProperty('measure_power', message.power),
 
@@ -81,7 +78,14 @@ class EnergyDevice extends BaseDevice {
 
             // Independent phase control
             this._updateProperty('phase_control', phaseControl)
-        ]);
+        ];
+
+        if (Number.isFinite(message.gridStatus)) {
+            const gridStatus = enums.decodeGridStatus(message.gridStatus);
+            propertyUpdates.unshift(this._updateProperty('grid_status', gridStatus));
+        }
+
+        await Promise.all(propertyUpdates);
 
         await this.updateSettingIfChanged('phaseControl', phaseControl, this.getSetting('phaseControl'));
     }
