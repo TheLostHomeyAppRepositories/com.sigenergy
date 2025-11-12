@@ -1,4 +1,8 @@
 {
+    "0.2.2": {
+        "en": "Stability improvements",
+        "sv": "Stabilitet förbättringar"
+    },
     "0.2.1": {
         "en": "Added PCS temperature capability",
         "sv": "Lade till PCS temperatur egenskapen"
