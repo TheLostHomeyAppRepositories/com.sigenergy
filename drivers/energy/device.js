@@ -52,8 +52,10 @@ class EnergyDevice extends BaseDevice {
     async _updateEnergyMeterProperties(message) {
 
         const phaseControl = enums.decodePhaseControl(message.phaseControl);
+        const gridStatus = enums.decodeGridStatus(message.gridStatus);
+
         await Promise.all([
-            this._updateProperty('grid_status', enums.decodeGridStatus(message.gridStatus)),
+            this._updateProperty('grid_status', gridStatus),
 
             // Total power measurement
             this._updateProperty('measure_power', message.power),

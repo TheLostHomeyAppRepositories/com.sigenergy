@@ -17,7 +17,11 @@ class EnergyDriver extends BaseDriver {
         this._grid_status_changed = this.homey.flow.getDeviceTriggerCard('grid_status_changed');
         this._grid_status_changed.registerRunListener(async (args, state) => {
             this.log(`Args: status.name='${args.status?.name}', state.value='${state.value}'`);
-            const result = args.status?.name == state.value;
+            const result = Boolean(
+                args.status?.name &&
+                typeof state.value === 'string' &&
+                args.status.name === state.value
+            );
             this.log(`Grid status comparison result: ${result}`);
             return result;
         });
@@ -32,7 +36,11 @@ class EnergyDriver extends BaseDriver {
         this.log(`Phase control trigger card registered: ${!!this._phase_control_changed}`);
         this._phase_control_changed.registerRunListener(async (args, state) => {
             this.log(`Args: control.name='${args.control?.name}', state.value='${state.value}'`);
-            const result = args.control?.name == state.value;
+            const result = Boolean(
+                args.control?.name &&
+                typeof state.value === 'string' &&
+                args.control.name === state.value
+            );
             this.log(`Phase control comparison result: ${result}`);
             return result;
         });
