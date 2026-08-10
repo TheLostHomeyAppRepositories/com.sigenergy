@@ -57,16 +57,32 @@ Must end with: `validated successfully against level 'publish'`.
 This also regenerates `app.json` from `.homeycompose/app.json`.
 
 ## Step 4 — Commit + tag
-Tag convention is **v-prefixed** (e.g. `v0.4.1`). Review `git status` first, then
-stage the release files explicitly (avoid blind `git add -A`; do NOT stage
-`app.json` — it is gitignored):
+Tag convention is **v-prefixed and lightweight** (e.g. `v0.4.1`). Review
+`git status` first, then stage the release files explicitly (avoid blind
+`git add -A`; do NOT stage `app.json` — it is gitignored):
 ```
 git add .homeycompose/app.json package.json .homeychangelog.json
 # add any remaining source files that belong to this release
 git commit -m "chore(release): v<X.Y.Z>"
 git tag v<X.Y.Z>
-git push origin main --follow-tags
+git push origin main
+git push origin v<X.Y.Z>
 ```
+Push the tag as its own explicit ref. Do **not** use `--follow-tags`: it pushes
+only *annotated* tags, so against this repo's lightweight tags it silently skips
+them and still reports `Everything up-to-date`. That is exactly how `v0.4.1` ended
+up tagged locally but missing from the remote.
+
+Then confirm the tag actually landed — a silent skip looks identical to success:
+```
+git ls-remote --tags origin | grep v<X.Y.Z>
+```
+
+If the release files were already committed (e.g. the version bump was folded into
+the feature commits rather than a standalone release commit), there is nothing to
+commit and `origin/main` may already be current. In that case skip straight to
+tagging and pushing the tag.
+
 Shortcut: `homey app version <next> --changelog.* --commit` does the bump +
 changelog + commit + tag in one step, but it runs *before* validation and does
 not touch `package.json`, so the explicit flow above is preferred.
@@ -88,4 +104,5 @@ treat it as a high-impact action and only proceed on the user's explicit go-ahea
 ## Notes
 - `test/` and `eslint.config.js` are excluded from the published bundle via
   `.homeyignore`.
-- Recent versions (0.3.x, 0.4.x) were not git-tagged; this flow restores tagging.
+- Tag history has gaps: `0.3.x` and `0.4.0` were never tagged. Everything from
+  `0.4.1` onward is tagged and pushed.
