@@ -3,6 +3,13 @@
 const EVDCCharger = require('../../lib/devices/evDCCharger.js');
 const BaseDevice = require('../baseDevice.js');
 const enums = require('../../lib/enums.js');
+const utilFunctions = require('../../lib/util.js');
+
+// Store keys for the charger's rated power values. Persisted so the power-limit
+// flow actions keep their bounds across restarts, and read from the store on
+// every use rather than from an instance field.
+const STORE_RATED_CHARGING_POWER = 'dc_rated_charging_power';
+const STORE_RATED_DISCHARGING_POWER = 'dc_rated_discharging_power';
 
 class EvDCChargerDevice extends BaseDevice {
 
@@ -53,7 +60,7 @@ class EvDCChargerDevice extends BaseDevice {
      * Public method - used by flow action cards.
      */
     async setMaxChargePower(kW) {
-        const clamped = this._clampPower(kW, 'ratedChargingPower');
+        const clamped = utilFunctions.clampPower(kW, this._getRatedPower('charging'));
         await this.api.setMaxChargePower(clamped)
             .catch(reason => {
                 this.error('Failed to set max charging power!', reason);
@@ -66,7 +73,7 @@ class EvDCChargerDevice extends BaseDevice {
      * Public method - used by flow action cards.
      */
     async setMaxDischargePower(kW) {
-        const clamped = this._clampPower(kW, 'ratedDischargingPower');
+        const clamped = utilFunctions.clampPower(kW, this._getRatedPower('discharging'));
         await this.api.setMaxDischargePower(clamped)
             .catch(reason => {
                 this.error('Failed to set max discharging power!', reason);
@@ -75,33 +82,44 @@ class EvDCChargerDevice extends BaseDevice {
         return true;
     }
 
-    _clampPower(kW, ratedKey) {
-        let value = Number(kW);
-        if (!Number.isFinite(value) || value < 0) {
-            value = 0;
-        }
-        const max = Number(this._ratedPower?.[ratedKey]);
-        if (Number.isFinite(max) && max > 0 && value > max) {
-            value = max;
-        }
-        return value;
+    /**
+     * Resolve a clamp bound from the device store, falling back to the matching
+     * display setting. Read on every use rather than cached, see
+     * BaseDevice.getPersistedNumber.
+     */
+    _getRatedPower(label) {
+        return label === 'charging'
+            ? this.getPersistedNumber(STORE_RATED_CHARGING_POWER, 'ratedChargingPower')
+            : this.getPersistedNumber(STORE_RATED_DISCHARGING_POWER, 'ratedDischargingPower');
     }
 
     async _handlePropertiesEvent(message) {
         try {
-            await this.setSettings({
-                serial: String(message.serial),
-                ratedChargingPower: Number.isFinite(message.ratedChargingPower)
-                    ? `${message.ratedChargingPower} kW` : '',
-                ratedDischargingPower: Number.isFinite(message.ratedDischargingPower)
-                    ? `${message.ratedDischargingPower} kW` : ''
-            });
+            // persistNumber ignores unusable values, so a failed or unsupported
+            // read leaves the previously stored bound intact and returns it.
+            const ratedChargingPower = await this.persistNumber(
+                STORE_RATED_CHARGING_POWER,
+                message.ratedChargingPower
+            );
+            const ratedDischargingPower = await this.persistNumber(
+                STORE_RATED_DISCHARGING_POWER,
+                message.ratedDischargingPower
+            );
 
-            // Cache rated power for clamping flow action input
-            this._ratedPower = {
-                ratedChargingPower: message.ratedChargingPower,
-                ratedDischargingPower: message.ratedDischargingPower
+            // Settings hold the same values unit-suffixed, for display only.
+            const settings = {
+                ratedChargingPower: ratedChargingPower !== undefined ? `${ratedChargingPower} kW` : '',
+                ratedDischargingPower: ratedDischargingPower !== undefined ? `${ratedDischargingPower} kW` : ''
             };
+
+            // Only touch the serial when the register actually returned one,
+            // otherwise a failed read would overwrite it with the string
+            // "undefined".
+            if (typeof message.serial === 'string' && message.serial.length > 0) {
+                settings.serial = message.serial;
+            }
+
+            await this.setSettings(settings);
         } catch (error) {
             this.error('Failed to update EV DC charger properties settings:', error);
         }

@@ -3,6 +3,13 @@
 const Plant = require('../../lib/devices/plant.js');
 const BaseDevice = require('../baseDevice.js');
 const enums = require('../../lib/enums.js');
+const utilFunctions = require('../../lib/util.js');
+
+// Store keys for the rated ESS power values. Persisted so the power-limit flow
+// actions still know the plant's bounds immediately after a restart, before the
+// first INFO register read of the new session has completed.
+const STORE_RATED_CHARGING_POWER = 'ess_rated_charging_power';
+const STORE_RATED_DISCHARGING_POWER = 'ess_rated_discharging_power';
 
 class PlantDevice extends BaseDevice {
 
@@ -18,6 +25,114 @@ class PlantDevice extends BaseDevice {
 
     createApi(options) {
         return new Plant(options);
+    }
+
+    /**
+     * Resolve a clamp bound from the device store, falling back to the matching
+     * display setting. Read on every use rather than cached, see
+     * BaseDevice.getPersistedNumber.
+     */
+    _getRatedPower(label) {
+        return label === 'charging'
+            ? this.getPersistedNumber(STORE_RATED_CHARGING_POWER, 'ratedChargingPower')
+            : this.getPersistedNumber(STORE_RATED_DISCHARGING_POWER, 'ratedDischargingPower');
+    }
+
+    async _handlePropertiesEvent(message) {
+        try {
+            // persistNumber ignores unusable values, so a failed or unsupported
+            // read leaves the previously stored bound intact and returns it.
+            const ratedChargingPower = await this.persistNumber(
+                STORE_RATED_CHARGING_POWER,
+                message.ratedChargingPower
+            );
+            const ratedDischargingPower = await this.persistNumber(
+                STORE_RATED_DISCHARGING_POWER,
+                message.ratedDischargingPower
+            );
+
+            // Settings hold the same values unit-suffixed, for display only.
+            await this.setSettings({
+                ratedChargingPower: ratedChargingPower !== undefined ? `${ratedChargingPower} kW` : '',
+                ratedDischargingPower: ratedDischargingPower !== undefined ? `${ratedDischargingPower} kW` : ''
+            });
+        } catch (error) {
+            this.error('Failed to update plant properties settings:', error);
+        }
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Caps how much power the battery may draw while charging. Writing 0 stops
+     * it charging altogether.
+     */
+    async setEssMaxChargePower(kW) {
+        const clamped = utilFunctions.clampPower(kW, this._getRatedPower('charging'));
+        return this._writeEssLimit('charging', clamped);
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Caps how much power the battery may supply while discharging. Writing 0
+     * stops it discharging altogether, which is the building block for "don't
+     * drain the battery into the car while it charges".
+     */
+    async setEssMaxDischargePower(kW) {
+        const clamped = utilFunctions.clampPower(kW, this._getRatedPower('discharging'));
+        return this._writeEssLimit('discharging', clamped);
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Restores unrestricted charging by writing the plant's rated charging
+     * power, which is the top of the register's documented range.
+     */
+    async removeEssChargeLimit() {
+        return this._writeEssLimit('charging', this._requireRatedPower('charging'));
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Restores unrestricted discharging by writing the plant's rated
+     * discharging power.
+     */
+    async removeEssDischargeLimit() {
+        return this._writeEssLimit('discharging', this._requireRatedPower('discharging'));
+    }
+
+    /**
+     * The rated power registers define the upper bound of the limit registers,
+     * so removing a limit is only meaningful once they have been read. Fail
+     * loudly rather than guessing a value the plant may reject.
+     */
+    _requireRatedPower(label) {
+        const rated = this._getRatedPower(label);
+        if (rated === undefined) {
+            throw new Error(`Cannot remove the battery ${label} limit: the plant's rated ${label} power is not known yet. Wait for the device to report it, or set an explicit power limit instead.`);
+        }
+        return rated;
+    }
+
+    async _writeEssLimit(label, kW) {
+        if (!this.api) {
+            throw new Error(`Failed to set max ${label} power! Device is not connected.`);
+        }
+
+        const write = label === 'charging'
+            ? this.api.setEssMaxChargingLimit(kW)
+            : this.api.setEssMaxDischargingLimit(kW);
+
+        await write.catch(reason => {
+            this.error(`Failed to set max ${label} power!`, reason);
+            throw new Error(`Failed to set max ${label} power! ${utilFunctions.formatError(reason)}`);
+        });
+
+        this.logMessage(`Set ESS max ${label} power to ${kW} kW`);
+        return true;
     }
 
     async _handleReadingsEvent(message) {

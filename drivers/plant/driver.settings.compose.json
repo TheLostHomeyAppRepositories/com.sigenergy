@@ -85,6 +85,33 @@
     {
         "type": "group",
         "label": {
+            "en": "Information",
+            "sv": "Information"
+        },
+        "children": [
+            {
+                "id": "ratedChargingPower",
+                "type": "label",
+                "label": {
+                    "en": "Battery rated charging power",
+                    "sv": "Batteriets märkeffekt laddning"
+                },
+                "value": ""
+            },
+            {
+                "id": "ratedDischargingPower",
+                "type": "label",
+                "label": {
+                    "en": "Battery rated discharging power",
+                    "sv": "Batteriets märkeffekt urladdning"
+                },
+                "value": ""
+            }
+        ]
+    },
+    {
+        "type": "group",
+        "label": {
             "en": "Debug",
             "sv": "Felsökning"
         },

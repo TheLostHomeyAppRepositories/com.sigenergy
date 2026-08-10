@@ -552,6 +552,63 @@ class BaseDevice extends Device {
         }
     }
 
+    /**
+     * Read a persisted positive number, preferring the device store and falling
+     * back to a setting holding the same value formatted for display.
+     *
+     * Deliberately read at the point of use rather than cached in an instance
+     * field. An in-memory value can be lost or go stale over a long-running app
+     * lifetime, and for values used as write bounds a stale reading silently
+     * changes what gets written to the device. The store survives that.
+     *
+     * @param {string} storeKey - device store key holding the raw number
+     * @param {string} [settingKey] - optional setting holding the display form
+     * @returns {number|undefined} the value, or undefined when not known
+     */
+    getPersistedNumber(storeKey, settingKey) {
+        const fromStore = utilFunctions.parsePositiveNumber(this.getStoreValue(storeKey));
+        if (fromStore !== undefined) {
+            return fromStore;
+        }
+
+        if (!settingKey) {
+            return undefined;
+        }
+
+        return utilFunctions.parsePositiveNumber(this.getSetting(settingKey));
+    }
+
+    /**
+     * Persist a positive number to the device store.
+     *
+     * Values that cannot be resolved are ignored rather than written, so a
+     * failed or unsupported register read never overwrites a known-good value
+     * with nothing.
+     *
+     * @param {string} storeKey - device store key
+     * @param {*} value - the candidate value
+     * @returns {Promise<number|undefined>} the value now held in the store
+     */
+    async persistNumber(storeKey, value) {
+        const resolved = utilFunctions.parsePositiveNumber(value);
+        const existing = this.getPersistedNumber(storeKey);
+
+        if (resolved === undefined) {
+            return existing;
+        }
+
+        if (resolved !== existing) {
+            try {
+                await this.setStoreValue(storeKey, resolved);
+            } catch (error) {
+                this.error(`Failed to persist '${storeKey}' with value '${resolved}'`, error);
+                return existing;
+            }
+        }
+
+        return resolved;
+    }
+
     logMessage(message) {
         this.log(`[${this.getName()}] ${message}`);
     }

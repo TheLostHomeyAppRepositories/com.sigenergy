@@ -3,6 +3,7 @@
 const Energy = require('../../lib/devices/energy.js');
 const BaseDevice = require('../baseDevice.js');
 const enums = require('../../lib/enums.js');
+const utilFunctions = require('../../lib/util.js');
 
 class EnergyDevice extends BaseDevice {
 
@@ -25,6 +26,44 @@ class EnergyDevice extends BaseDevice {
     // _handlePropertiesEvent(message) {
     //     this.updateSetting('serial', message.serial);
     // }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Caps how much power may be fed into the grid at the grid connection
+     * point. Requires a grid sensor and takes effect regardless of EMS mode.
+     */
+    async setGridMaxExportPower(kW) {
+        return this._writeGridLimit('export', utilFunctions.clampPower(kW));
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Caps how much power may be drawn from the grid at the grid connection
+     * point, e.g. to stay under a fuse rating.
+     */
+    async setGridMaxImportPower(kW) {
+        return this._writeGridLimit('import', utilFunctions.clampPower(kW));
+    }
+
+    async _writeGridLimit(direction, kW) {
+        if (!this.api) {
+            throw new Error(`Failed to set max grid ${direction} power! Device is not connected.`);
+        }
+
+        const write = direction === 'export'
+            ? this.api.setMaxExportLimitation(kW)
+            : this.api.setMaxImportLimitation(kW);
+
+        await write.catch(reason => {
+            this.error(`Failed to set max grid ${direction} power!`, reason);
+            throw new Error(`Failed to set max grid ${direction} power! ${utilFunctions.formatError(reason)}`);
+        });
+
+        this.logMessage(`Set max grid ${direction} power to ${kW} kW`);
+        return true;
+    }
 
     async _handleReadingsEvent(message) {
         try {

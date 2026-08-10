@@ -1,0 +1,32 @@
+{
+    "id": "set_ess_max_charge_power",
+    "title": {
+        "en": "Set max battery charge power",
+        "sv": "Sätt max laddeffekt för batteriet"
+    },
+    "titleFormatted": {
+        "en": "Set max battery charge power to [[power]] kW",
+        "sv": "Sätt max laddeffekt för batteriet till [[power]] kW"
+    },
+    "hint": {
+        "en": "Caps how much power the battery may draw. Set 0 to stop it charging completely, for example to send surplus solar to the grid instead. Applies to the whole system and works in any EMS mode.",
+        "sv": "Begränsar hur mycket effekt batteriet får ta emot. Sätt 0 för att helt stoppa laddning, till exempel för att skicka solöverskottet till nätet i stället. Gäller hela systemet och fungerar i alla EMS-lägen."
+    },
+    "args": [
+        {
+            "name": "power",
+            "type": "number",
+            "min": 0,
+            "step": 0.1,
+            "title": {
+                "en": "Power (kW)",
+                "sv": "Effekt (kW)"
+            }
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=plant"
+        }
+    ]
+}

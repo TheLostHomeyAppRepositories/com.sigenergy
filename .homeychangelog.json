@@ -1,4 +1,8 @@
 {
+  "0.5.0": {
+    "en": "Battery control: Added flow actions to limit the battery's charging and discharging power, so you can stop the battery from discharging while the car is charging. Also added flow actions to limit grid import and export power. The battery's rated power is now shown in the Plant device settings.",
+    "sv": "Batteristyrning: Lade till flow-actions för att begränsa batteriets ladd- och urladdeffekt, så att du kan hindra batteriet från att laddas ur medan bilen laddar. Lade även till flow-actions för att begränsa effekten för import och export mot nätet. Batteriets märkeffekt visas nu i Plant-enhetens inställningar."
+  },
   "0.4.2": {
     "en": "Improved Modbus reliability by preventing timeout cascades, stale data updates, and incorrect availability recovery.",
     "sv": "Förbättrad Modbus-stabilitet genom att förhindra kaskader av tidsgränsfel, inaktuella datauppdateringar och felaktig återställning av tillgänglighet."

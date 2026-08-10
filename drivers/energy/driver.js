@@ -49,6 +49,18 @@ class EnergyDriver extends BaseDriver {
                 return enums.getPhaseControl();
             }
         );
+
+        // Action: Cap power fed into the grid at the connection point
+        this.homey.flow.getActionCard('set_grid_max_export_power')
+            .registerRunListener(async (args) => {
+                return await args.device.setGridMaxExportPower(args.power);
+            });
+
+        // Action: Cap power drawn from the grid at the connection point
+        this.homey.flow.getActionCard('set_grid_max_import_power')
+            .registerRunListener(async (args) => {
+                return await args.device.setGridMaxImportPower(args.power);
+            });
     }
 
     async onPair(session) {

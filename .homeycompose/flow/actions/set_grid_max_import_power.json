@@ -1,0 +1,32 @@
+{
+    "id": "set_grid_max_import_power",
+    "title": {
+        "en": "Set max grid import power",
+        "sv": "Sätt max importeffekt från nätet"
+    },
+    "titleFormatted": {
+        "en": "Set max grid import power to [[power]] kW",
+        "sv": "Sätt max importeffekt från nätet till [[power]] kW"
+    },
+    "hint": {
+        "en": "Caps how much power may be drawn from the grid at the connection point, for example to stay under a fuse rating. Requires a grid sensor and applies regardless of EMS mode.",
+        "sv": "Begränsar hur mycket effekt som får tas från nätet vid anslutningspunkten, till exempel för att hålla sig under en säkrings märkström. Kräver en nätsensor och gäller oavsett EMS-läge."
+    },
+    "args": [
+        {
+            "name": "power",
+            "type": "number",
+            "min": 0,
+            "step": 0.1,
+            "title": {
+                "en": "Power (kW)",
+                "sv": "Effekt (kW)"
+            }
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=energy"
+        }
+    ]
+}
