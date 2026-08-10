@@ -1,10 +1,6 @@
 ---
-name: Homey App Release
-description: >-
-  Cut and publish a new release of the Sigenergy Homey app. Use when the user
-  asks to make a new release, bump the version and publish, or ship the app to
-  the Homey App Store. Covers version bump, bilingual changelog, validation
-  gate, git commit + tag, and the interactive `homey app publish` handoff.
+name: homey-release
+description: "Cut and publish a new release of the Sigenergy Homey app. Use when the user asks to make a new release, bump the version and publish, or ship the app to the Homey App Store. Covers version bump, bilingual changelog, validation gate, git commit + tag, and the interactive `homey app publish` handoff."
 ---
 
 # Homey App Release
