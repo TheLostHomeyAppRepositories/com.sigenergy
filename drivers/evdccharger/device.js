@@ -11,6 +11,17 @@ const utilFunctions = require('../../lib/util.js');
 const STORE_RATED_CHARGING_POWER = 'dc_rated_charging_power';
 const STORE_RATED_DISCHARGING_POWER = 'dc_rated_discharging_power';
 
+// Below this the register is reporting sensor noise rather than a connected
+// vehicle, so it is reported as 0 V. An unread register stays unknown.
+const VEHICLE_VOLTAGE_NOISE_FLOOR = 10;
+
+function vehicleVoltage(value) {
+    if (!Number.isFinite(value)) {
+        return undefined;
+    }
+    return value > VEHICLE_VOLTAGE_NOISE_FLOOR ? value : 0;
+}
+
 class EvDCChargerDevice extends BaseDevice {
 
     async onInit() {
@@ -20,8 +31,6 @@ class EvDCChargerDevice extends BaseDevice {
     }
 
     async upgradeDevice() {
-        this.logMessage('Upgrading existing device');
-
         // v2.9 capabilities
         await this.addCapabilityHelper('evdc_running_state');
         await this.addCapabilityHelper('measure_current.discharge');
@@ -134,7 +143,9 @@ class EvDCChargerDevice extends BaseDevice {
     }
 
     async _updateEvChargerProperties(message) {
-        const isCharging = message.power > 0;
+        // Without a power reading there is nothing to infer charging from, so
+        // leave the capability as it is instead of reporting "not charging".
+        const isCharging = Number.isFinite(message.power) ? message.power > 0 : undefined;
         const runningStateName = enums.decodeDCChargerState(message.runningState);
         const chargingState = Number.isFinite(message.runningState)
             ? enums.mapDCChargerStateToChargingState(message.runningState, message.power)
@@ -150,8 +161,8 @@ class EvDCChargerDevice extends BaseDevice {
             this._updateProperty('measure_power', message.power),
             this._updateProperty('measure_current', message.current),
             this._updateProperty('measure_current.discharge', message.dischargeCurrent),
-            this._updateProperty('measure_voltage.vehicle', message.vehicleBatteryVoltage > 10 ? message.vehicleBatteryVoltage : 0),
-            this._updateProperty('measure_battery.vehicle', message.vehicleSoc || 0),
+            this._updateProperty('measure_voltage.vehicle', vehicleVoltage(message.vehicleBatteryVoltage)),
+            this._updateProperty('measure_battery.vehicle', message.vehicleSoc),
 
             // Power limits (read back current values from device)
             this._updateProperty('evdc_max_charge_power', message.maxChargePowerLimit),
@@ -180,13 +191,21 @@ class EvDCChargerDevice extends BaseDevice {
     /**
      * Fallback when running state register is unavailable - infers state
      * from power and vehicle battery voltage like the v2.8 implementation.
+     *
+     * Returns undefined when power is not known either, since every branch
+     * below is a statement about the power reading.
      */
     _fallbackChargingState(message) {
+        if (!Number.isFinite(message.power)) {
+            return undefined;
+        }
+
         if (message.power > 0) {
             return 'plugged_in_charging';
         } else if (message.power < 0) {
             return 'plugged_in_discharging';
-        } else if (message.power === 0 && message.vehicleBatteryVoltage > 10) {
+        } else if (Number.isFinite(message.vehicleBatteryVoltage)
+            && message.vehicleBatteryVoltage > VEHICLE_VOLTAGE_NOISE_FLOOR) {
             return 'plugged_in';
         } else {
             return 'plugged_out';

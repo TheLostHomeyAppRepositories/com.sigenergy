@@ -42,14 +42,13 @@ class SigenergyApp extends App {
         return this.homey.manifest.version;
     }
 
+    // App-level flow registration hooks. Device-scoped cards are registered by
+    // each driver's _registerFlows, which logs for itself, so these stay silent
+    // until they actually have something to register.
     async loadConditions() {
-        this.log('Loading conditions...');
-
     }
 
     async loadActions() {
-        this.log('Loading actions...');
-
     }
 }
 module.exports = SigenergyApp;

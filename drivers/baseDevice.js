@@ -131,11 +131,49 @@ class BaseDevice extends Device {
      * binds the correct register set. The base class owns the rest of the
      * session lifecycle (initialize + event wiring) so drivers don't repeat it.
      *
-     * @param {object} options - { host, port, modbus_unitId, refreshInterval, timeout, device }
+     * @param {object} options - { host, port, modbus_unitId, refreshInterval, timeout, debug, device }
      * @returns {object} the device API instance (a lib/base.js subclass)
      */
     createApi(_options) {
         throw new Error(`${this.constructor.name} must implement createApi(options)`);
+    }
+
+    /**
+     * Whether the user has asked for detailed (per-poll) logging on this device.
+     *
+     * Off by default: at the default 10s refresh it is thousands of lines a day,
+     * which would push everything else out of the log Homey keeps for diagnostic
+     * reports. Meant to be switched on to reproduce a problem, then off again.
+     */
+    isDebugEnabled() {
+        return this.getSetting('enableDebug') === true;
+    }
+
+    /**
+     * Restate the Homey side of the device when detailed logging is switched on.
+     *
+     * The capability list is the piece that cannot be worked out from the Modbus
+     * logs. `_updateProperty` skips silently when a capability is absent, so a
+     * register can decode perfectly and still never reach the UI - which is what
+     * happens when a capability was removed by a migration, or by an
+     * mpptCount/outputType read that came back wrong. Pairing this against the
+     * decoded values closes that gap.
+     *
+     * Availability is included because an unavailable device still polls, and
+     * "why is it greyed out" is a different question from "why is the value 0".
+     */
+    _logDeviceSnapshot() {
+        try {
+            this.logMessage(`Capabilities: ${this.getCapabilities().join(', ')}`);
+            this.logMessage(`Available: ${this.getAvailable()}`
+                + `, class: ${this.getClass()}`
+                + `, session generation: ${this._sessionGeneration}`
+                + `, last valid reading: ${this._lastValidReadingAt
+                    ? `${Math.round((Date.now() - this._lastValidReadingAt) / 1000)}s ago`
+                    : 'none yet'}`);
+        } catch (error) {
+            this.error('Failed to log device snapshot:', error);
+        }
     }
 
     async setupSession(host, port, modbus_unitId, refreshInterval, timeout, generation = this._sessionGeneration) {
@@ -149,6 +187,7 @@ class BaseDevice extends Device {
             modbus_unitId,
             refreshInterval,
             timeout,
+            debug: this.isDebugEnabled(),
             device: this
         });
 
@@ -395,8 +434,30 @@ class BaseDevice extends Device {
         return Number.isFinite(number) && number > 0 ? number : fallback;
     }
 
+    /**
+     * Write a decoded register value to a capability.
+     *
+     * "Not known" is deliberately distinct from a value. A register that failed
+     * to read, or that this device's firmware does not implement, is simply
+     * absent from the readings message, and the capability then keeps whatever
+     * it last held rather than being written to a placeholder. That matters most
+     * for cumulative meters: writing 0 to `meter_power` makes Homey Energy and
+     * Insights see the full total as freshly produced/consumed once the register
+     * recovers. It also keeps a genuine zero readable as a genuine zero, so a
+     * capability stuck at 0 is real device data and not a silent read failure.
+     *
+     * Callers therefore pass raw decoded values through, and derived values
+     * resolve to undefined when an input they need is missing.
+     */
     async _updateProperty(key, value) {
-        if (value === undefined) {
+        if (value === undefined || value === null) {
+            return;
+        }
+
+        // NaN/Infinity reach here when a derived value was computed from a
+        // missing input (e.g. undefined + number). Treat them as "not known"
+        // too, rather than letting setCapabilityValue reject or store them.
+        if (typeof value === 'number' && !Number.isFinite(value)) {
             return;
         }
 
@@ -514,6 +575,17 @@ class BaseDevice extends Device {
             this.logMessage(`Modbus timeout value was change to: '${newSettings.timeout}'`);
             timeout = newSettings.timeout;
             changeConn = true;
+        }
+
+        // Applied to the live session instead of forcing a reconnect: switching
+        // logging on must not reset the state being investigated.
+        if (changedKeys.indexOf("enableDebug") > -1) {
+            const enabled = newSettings.enableDebug === true;
+            this.logMessage(`Detailed logging ${enabled ? 'enabled' : 'disabled'}`);
+            this.api?.setDebug(enabled);
+            if (enabled) {
+                this._logDeviceSnapshot();
+            }
         }
 
         if (changeConn) {

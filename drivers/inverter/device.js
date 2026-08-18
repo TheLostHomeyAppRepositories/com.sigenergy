@@ -4,6 +4,14 @@ const Inverter = require('../../lib/devices/inverter.js');
 const BaseDevice = require('../baseDevice.js');
 const enums = require('../../lib/enums.js');
 
+/**
+ * Phase voltages are shown as whole volts. Returns undefined when the register
+ * was not read, so the capability is left alone instead of being rounded to 0.
+ */
+function roundVoltage(value) {
+    return Number.isFinite(value) ? Math.round(value) : undefined;
+}
+
 class InverterDevice extends BaseDevice {
 
     async onInit() {
@@ -11,9 +19,12 @@ class InverterDevice extends BaseDevice {
         await super.onInit();
     }
 
+    /**
+     * Capability migrations for devices paired by an older app version. The
+     * add/remove helpers log only when they actually change something, so an
+     * already up-to-date device produces no output. Nothing to migrate yet.
+     */
     async upgradeDevice() {
-        this.logMessage('Upgrading existing device');
-
     }
 
     createApi(options) {
@@ -22,10 +33,16 @@ class InverterDevice extends BaseDevice {
 
     async _handlePropertiesEvent(message) {
         try {
-            const settings = {
-                serial: String(message.serial),
-                mpptCount: String(message.mpptCount)
-            };
+            // Same rule as the readings path: a register that did not read must
+            // not overwrite a known-good value. Writing String(undefined) here
+            // would put the literal text "undefined" in the settings.
+            const settings = {};
+            if (typeof message.serial === 'string' && message.serial.length > 0) {
+                settings.serial = message.serial;
+            }
+            if (Number.isFinite(message.mpptCount)) {
+                settings.mpptCount = String(message.mpptCount);
+            }
 
             const outputType = enums.decodeInverterOutputType(message.outputType);
             if (outputType) {
@@ -33,9 +50,17 @@ class InverterDevice extends BaseDevice {
                 settings.outputType = outputType;
             }
 
-            await this.setSettings(settings);
+            if (Object.keys(settings).length > 0) {
+                await this.setSettings(settings);
+            }
 
-            await this._configurePVCapabilities(message.mpptCount);
+            // These two registers decide which capabilities the device has, so a
+            // failed read must not be allowed to reconfigure it. An unguarded
+            // mpptCount of undefined compares false against every index and
+            // would strip all four PV voltage capabilities.
+            if (Number.isFinite(message.mpptCount) && message.mpptCount > 0) {
+                await this._configurePVCapabilities(message.mpptCount);
+            }
 
             if (outputType) {
                 await this._configureOutputCapabilities(outputType);
@@ -97,38 +122,38 @@ class InverterDevice extends BaseDevice {
 
     async _updateSolarChargerProperties(message) {
         let updates = [
-            this._updateProperty('measure_power', message.power || 0),
-            this._updateProperty('meter_power.daily', message.dailyYield || 0),
-            this._updateProperty('meter_power', message.totalYield || 0)
+            this._updateProperty('measure_power', message.power),
+            this._updateProperty('meter_power.daily', message.dailyYield),
+            this._updateProperty('meter_power', message.totalYield)
         ];
 
         // Only update PV voltages based on mpptCount
         const mpptCount = Number(this.getSetting('mpptCount'));
         if (mpptCount >= 1) {
-            updates.push(this._updateProperty('measure_voltage.pv1', message.pv1Voltage || 0));
+            updates.push(this._updateProperty('measure_voltage.pv1', message.pv1Voltage));
         }
         if (mpptCount >= 2) {
-            updates.push(this._updateProperty('measure_voltage.pv2', message.pv2Voltage || 0));
+            updates.push(this._updateProperty('measure_voltage.pv2', message.pv2Voltage));
         }
         if (mpptCount >= 3) {
-            updates.push(this._updateProperty('measure_voltage.pv3', message.pv3Voltage || 0));
+            updates.push(this._updateProperty('measure_voltage.pv3', message.pv3Voltage));
         }
         if (mpptCount >= 4) {
-            updates.push(this._updateProperty('measure_voltage.pv4', message.pv4Voltage || 0));
+            updates.push(this._updateProperty('measure_voltage.pv4', message.pv4Voltage));
         }
 
         // Phase voltage/current based on the inverter output type
         const outputType = this.getSetting('outputType');
         if (outputType == 'L1/L2/L3' || outputType == 'L1/L2/L3/N') {
-            updates.push(this._updateProperty('measure_voltage.phaseA', parseInt((message.phaseAVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_voltage.phaseA', roundVoltage(message.phaseAVoltage)));
             updates.push(this._updateProperty('measure_current.phaseA', message.phaseACurrent));
-            updates.push(this._updateProperty('measure_voltage.phaseB', parseInt((message.phaseBVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_voltage.phaseB', roundVoltage(message.phaseBVoltage)));
             updates.push(this._updateProperty('measure_current.phaseB', message.phaseBCurrent));
-            updates.push(this._updateProperty('measure_voltage.phaseC', parseInt((message.phaseCVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_voltage.phaseC', roundVoltage(message.phaseCVoltage)));
             updates.push(this._updateProperty('measure_current.phaseC', message.phaseCCurrent));
         } else {
             // L/N or L1/L2/N
-            updates.push(this._updateProperty('measure_voltage.phaseA', parseInt((message.phaseAVoltage || 0).toFixed(0))));
+            updates.push(this._updateProperty('measure_voltage.phaseA', roundVoltage(message.phaseAVoltage)));
             updates.push(this._updateProperty('measure_current.phaseA', message.phaseACurrent));
         }
 

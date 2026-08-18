@@ -12,8 +12,6 @@ class BatteryDevice extends BaseDevice {
     }
 
     async upgradeDevice() {
-        this.logMessage('Upgrading existing device');
-
         await this.removeCapabilityHelper('grid_status');
         await this.addCapabilityHelper('firmware');
         await this.addCapabilityHelper('measure_temperature.pcs');
@@ -60,7 +58,12 @@ class BatteryDevice extends BaseDevice {
     }
 
     async _updateBatteryProperties(message) {
-        const firmware = (message.firmware || '').trim();
+        // A failed string read must not blank the firmware capability/setting,
+        // so an absent or empty value resolves to undefined and is skipped.
+        const firmware = typeof message.firmware === 'string' && message.firmware.trim().length > 0
+            ? message.firmware.trim()
+            : undefined;
+
         let updates = [
             this._updateProperty('measure_battery', message.soc),
             this._updateProperty('measure_power', message.power),
@@ -79,7 +82,9 @@ class BatteryDevice extends BaseDevice {
         await Promise.all(updates);
 
         // Update firmware setting if changed
-        await this.updateSettingIfChanged('firmware', firmware, this.getSetting('firmware'));
+        if (firmware !== undefined) {
+            await this.updateSettingIfChanged('firmware', firmware, this.getSetting('firmware'));
+        }
     }
 }
 module.exports = BatteryDevice;

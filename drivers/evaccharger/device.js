@@ -12,8 +12,12 @@ class EvACChargerDevice extends BaseDevice {
         await super.onInit();
     }
 
+    /**
+     * Capability migrations for devices paired by an older app version. The
+     * add/remove helpers log only when they actually change something, so an
+     * already up-to-date device produces no output. Nothing to migrate yet.
+     */
     async upgradeDevice() {
-        this.logMessage('Upgrading existing device');
     }
 
     createApi(options) {
@@ -60,7 +64,11 @@ class EvACChargerDevice extends BaseDevice {
     }
 
     async _updateEvChargerProperties(message) {
-        const isCharging = message.power > 0;
+        // Without a power reading there is nothing to infer charging from, so
+        // leave the capability as it is instead of reporting "not charging".
+        // chargingState is covered by the status register itself: its mapper
+        // returns undefined when that register was not read.
+        const isCharging = Number.isFinite(message.power) ? message.power > 0 : undefined;
         const chargingState = enums.mapACChargerStatusToChargingState(message.status, message.power);
 
         await Promise.all([

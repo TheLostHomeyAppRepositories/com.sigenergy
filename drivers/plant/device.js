@@ -18,9 +18,12 @@ class PlantDevice extends BaseDevice {
         await super.onInit();
     }
 
+    /**
+     * Capability migrations for devices paired by an older app version. The
+     * add/remove helpers log only when they actually change something, so an
+     * already up-to-date device produces no output. Nothing to migrate yet.
+     */
     async upgradeDevice() {
-        this.logMessage('Upgrading existing device');
-
     }
 
     createApi(options) {
@@ -143,6 +146,29 @@ class PlantDevice extends BaseDevice {
         }
     }
 
+    /**
+     * Total PV power is the plant's own production plus any third-party inverter
+     * feeding the same plant.
+     *
+     * Third-party inverter power (30194) is optional: it only exists on plants
+     * that have one, and the register was added in protocol V2.7, so a missing
+     * value counts as zero. The plant's own PV power is required - without it
+     * there is no total to report, and returning the third-party figure alone
+     * (or 0) would understate production. Returning undefined leaves the
+     * capability at its last known value instead.
+     */
+    _resolveSolarPower(message) {
+        if (!Number.isFinite(message.solarPower)) {
+            return undefined;
+        }
+
+        const thirdParty = Number.isFinite(message.thirdPartyInverterPower)
+            ? message.thirdPartyInverterPower
+            : 0;
+
+        return message.solarPower + thirdParty;
+    }
+
     async _updatePlantProperties(message) {
 
         const evChargerPower = await this.calculateEVChargerPower();
@@ -150,7 +176,7 @@ class PlantDevice extends BaseDevice {
         await Promise.all([
             this._updateProperty('measure_power.grid', message.gridPower),
             this._updateProperty('measure_power.battery', message.batteryPower),
-            this._updateProperty('measure_power.solar', (message.solarPower || 0) + (message.thirdPartyInverterPower || 0)),
+            this._updateProperty('measure_power.solar', this._resolveSolarPower(message)),
             this._updateProperty('measure_power.load', message.generalLoadPower),
             this._updateProperty('measure_power.evcharger', evChargerPower),
             this._updateProperty('measure_battery', message.batterySoc),
@@ -192,15 +218,18 @@ class PlantDevice extends BaseDevice {
     async calculateEVChargerPower() {
         let power = 0;
 
-        const dcchargerDevices = this.homey.drivers.getDriver('evdccharger').getDevices();
-        for (const charger of dcchargerDevices) {
-            power = power + charger.getCapabilityValue('measure_power');
-        }
+        // A charger whose measure_power is not known yet (newly added, or its
+        // register has not read successfully) contributes nothing rather than
+        // poisoning the sum with null/NaN.
+        const addChargerPower = charger => {
+            const value = charger.getCapabilityValue('measure_power');
+            if (Number.isFinite(value)) {
+                power = power + value;
+            }
+        };
 
-        const acchargerDevices = this.homey.drivers.getDriver('evaccharger').getDevices();
-        for (const charger of acchargerDevices) {
-            power = power + charger.getCapabilityValue('measure_power');
-        }
+        this.homey.drivers.getDriver('evdccharger').getDevices().forEach(addChargerPower);
+        this.homey.drivers.getDriver('evaccharger').getDevices().forEach(addChargerPower);
 
         return power;
     }

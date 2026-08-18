@@ -13,8 +13,6 @@ class EnergyDevice extends BaseDevice {
     }
 
     async upgradeDevice() {
-        this.logMessage('Upgrading existing device');
-
         await this.addCapabilityHelper('grid_status');
         await this.addCapabilityHelper('phase_control');
     }
@@ -82,17 +80,17 @@ class EnergyDevice extends BaseDevice {
             this._updateProperty('measure_power', message.power),
 
             // Phase L1 measurements
-            this._updateProperty('measure_power.L1', message.powerL1 || 0),
+            this._updateProperty('measure_power.L1', message.powerL1),
 
             // Phase L2 measurements
-            this._updateProperty('measure_power.L2', message.powerL2 || 0),
+            this._updateProperty('measure_power.L2', message.powerL2),
 
             // Phase L3 measurements
-            this._updateProperty('measure_power.L3', message.powerL3 || 0),
+            this._updateProperty('measure_power.L3', message.powerL3),
 
             // Energy meters
-            this._updateProperty('meter_power.imported', message.totalImportedEnergy || 0),
-            this._updateProperty('meter_power.exported', message.totalExportedEnergy || 0),
+            this._updateProperty('meter_power.imported', message.totalImportedEnergy),
+            this._updateProperty('meter_power.exported', message.totalExportedEnergy),
 
             // Independent phase control
             this._updateProperty('phase_control', phaseControl)

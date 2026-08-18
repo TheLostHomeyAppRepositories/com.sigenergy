@@ -11,7 +11,17 @@ test('decodeBatteryChargingState maps running state + power to charge/discharge/
     assert.equal(enums.decodeBatteryChargingState(1, 0), 'discharging'); // power > 0 is false
     assert.equal(enums.decodeBatteryChargingState(0, 500), 'idle'); // standby
     assert.equal(enums.decodeBatteryChargingState(2, 0), 'idle'); // fault
-    assert.equal(enums.decodeBatteryChargingState(99, 0), 'idle'); // default
+    assert.equal(enums.decodeBatteryChargingState(99, 0), 'idle'); // unknown value still maps
+});
+
+test('state mappers return undefined when the state register was not read', () => {
+    // An unread register must not become a concrete state, otherwise a failed
+    // Modbus read reports a charging battery as idle and a plugged-in car as
+    // unplugged. An unknown *value* still falls back (asserted above).
+    assert.equal(enums.decodeBatteryChargingState(undefined, 500), undefined);
+    assert.equal(enums.decodeBatteryChargingState(null, 500), undefined);
+    assert.equal(enums.mapDCChargerStateToChargingState(undefined, 500), undefined);
+    assert.equal(enums.mapACChargerStatusToChargingState(undefined, 500), undefined);
 });
 
 test('decodeDCChargerState resolves known states and flags unknown ones', () => {

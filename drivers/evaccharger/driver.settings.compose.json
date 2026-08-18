@@ -90,6 +90,19 @@
         },
         "children": [
             {
+                "id": "enableDebug",
+                "type": "checkbox",
+                "value": false,
+                "label": {
+                    "en": "Detailed logging",
+                    "sv": "Detaljerad loggning"
+                },
+                "hint": {
+                    "en": "Logs every Modbus sweep, including which registers returned no value at all. Switch it on, let it run while the problem happens, send a diagnostic report, then switch it off again - it produces a lot of log lines.",
+                    "sv": "Loggar varje Modbus-avläsning, inklusive vilka register som inte gav något värde alls. Slå på, låt det köra medan problemet uppstår, skicka en diagnostikrapport och slå sedan av igen - det ger många loggrader."
+                }
+            },
+            {
                 "id": "last_error",
                 "type": "textarea",
                 "label": {
