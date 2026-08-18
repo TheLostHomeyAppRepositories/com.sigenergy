@@ -1,4 +1,8 @@
 {
+  "0.6.0": {
+    "en": "Fixed failed register reads being reported as 0, which could corrupt energy totals and Insights history, and could remove the PV voltage capabilities. Added a Detailed logging setting per device, so a diagnostic report now shows exactly what the inverter reports, including its firmware version.",
+    "sv": "Rättade att misslyckade registeravläsningar rapporterades som 0, vilket kunde förstöra energitotaler och Insights-historik samt ta bort PV-spänningsegenskaperna. Lade till inställningen Detaljerad loggning per enhet, så att en diagnostikrapport nu visar exakt vad växelriktaren rapporterar, inklusive dess firmwareversion."
+  },
   "0.5.0": {
     "en": "Battery control: Added flow actions to limit the battery's charging and discharging power, so you can stop the battery from discharging while the car is charging. Also added flow actions to limit grid import and export power. The battery's rated power is now shown in the Plant device settings.",
     "sv": "Batteristyrning: Lade till flow-actions för att begränsa batteriets ladd- och urladdeffekt, så att du kan hindra batteriet från att laddas ur medan bilen laddar. Lade även till flow-actions för att begränsa effekten för import och export mot nätet. Batteriets märkeffekt visas nu i Plant-enhetens inställningar."
