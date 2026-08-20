@@ -137,6 +137,19 @@
                     "sv": "Senaste API felmeddelandet"
                 },
                 "value": ""
+            },
+            {
+                "id": "skipped_registers",
+                "type": "label",
+                "label": {
+                    "en": "Registers not answered",
+                    "sv": "Register utan svar"
+                },
+                "value": "",
+                "hint": {
+                    "en": "Filled in by the app. Modbus registers this device accepted a request for but never answered, and that the app has therefore stopped reading - normally registers your firmware does not implement. Capabilities that depend on them stay empty. The list is rebuilt from scratch when the app restarts or a connection setting is changed.",
+                    "sv": "Fylls i av appen. Modbus-register som enheten tog emot en förfrågan för men aldrig svarade på, och som appen därför slutat läsa - normalt register som din firmware inte har. Funktioner som bygger på dem förblir tomma. Listan byggs upp från början när appen startas om eller en anslutningsinställning ändras."
+                }
             }
         ]
     }

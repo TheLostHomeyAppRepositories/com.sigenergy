@@ -1,4 +1,8 @@
 {
+  "0.6.1": {
+    "en": "Fixed devices becoming permanently unavailable when the inverter silently ignores a single Modbus register - the app now identifies that register, stops reading it, and keeps the device working. Connection error messages are clearer, a slow inverter is no longer rejected at app startup by a too-strict reachability check, and a new read-only device setting lists any registers that went unanswered.",
+    "sv": "Rättade att enheter kunde bli permanent otillgängliga när växelriktaren tyst ignorerar ett enskilt Modbus-register - appen identifierar nu registret, slutar läsa det och håller enheten fungerande. Anslutningsfelmeddelanden är tydligare, en långsam växelriktare avvisas inte längre vid appstart av en för strikt tillgänglighetskontroll, och en ny skrivskyddad enhetsinställning listar register som inte besvarades."
+  },
   "0.6.0": {
     "en": "Fixed failed register reads being reported as 0, which could corrupt energy totals and Insights history, and could remove the PV voltage capabilities. Added a Detailed logging setting per device, so a diagnostic report now shows exactly what the inverter reports, including its firmware version.",
     "sv": "Rättade att misslyckade registeravläsningar rapporterades som 0, vilket kunde förstöra energitotaler och Insights-historik samt ta bort PV-spänningsegenskaperna. Lade till inställningen Detaljerad loggning per enhet, så att en diagnostikrapport nu visar exakt vad växelriktaren rapporterar, inklusive dess firmwareversion."

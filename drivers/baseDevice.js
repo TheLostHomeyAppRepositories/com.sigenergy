@@ -242,6 +242,12 @@ class BaseDevice extends Device {
                     return this._handleConnectionStatus(status, api, generation);
                 }
                 return undefined;
+            },
+            diagnostics: message => {
+                if (this._isCurrentSession(api, generation)) {
+                    return this._handleDiagnostics(message);
+                }
+                return undefined;
             }
         };
 
@@ -258,6 +264,7 @@ class BaseDevice extends Device {
         api.on('readings', listeners.readings);
         api.on('error', listeners.error);
         api.on('connectionStatus', listeners.connectionStatus);
+        api.on('diagnostics', listeners.diagnostics);
         this._apiEventListeners = listeners;
     }
 
@@ -273,6 +280,7 @@ class BaseDevice extends Device {
         api.removeListener('readings', listeners.readings);
         api.removeListener('error', listeners.error);
         api.removeListener('connectionStatus', listeners.connectionStatus);
+        api.removeListener('diagnostics', listeners.diagnostics);
         this._apiEventListeners = null;
     }
 
@@ -298,6 +306,35 @@ class BaseDevice extends Device {
         if (this._isCurrentSession(api, generation)) {
             await this._handleReadingsEvent(message);
         }
+    }
+
+    /**
+     * Surface the registers the API layer has stopped asking for as a read-only
+     * setting, so a user (or a diagnostic report) can see that a missing value is
+     * a register this device never answers rather than an app fault.
+     *
+     * The API layer only emits this on change, and the setting write is itself
+     * change-guarded, so this is cheap enough to sit on the poll path.
+     */
+    async _handleDiagnostics({ skippedRegisters, maxReported = 6 } = {}) {
+        if (!Array.isArray(skippedRegisters)) {
+            return;
+        }
+
+        // "None" rather than blank: an empty setting is what a device that has
+        // never connected shows, and that is a different statement.
+        let text = 'None';
+        if (skippedRegisters.length > 0) {
+            const shown = skippedRegisters.slice(0, maxReported).join(', ');
+            const hidden = skippedRegisters.length - maxReported;
+            text = hidden > 0 ? `${shown} (+${hidden} more)` : shown;
+        }
+
+        await this.updateSettingIfChanged(
+            'skipped_registers',
+            text,
+            this.getSetting('skipped_registers')
+        );
     }
 
     /**
