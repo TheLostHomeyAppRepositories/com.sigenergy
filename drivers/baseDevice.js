@@ -527,7 +527,10 @@ class BaseDevice extends Device {
     }
 
     async _handleErrorEvent(error) {
-        this.error('Houston we have a problem', error);
+        // Message only: every error arrives wrapped by Base's #emitError, so its
+        // stack points at the wrapper and repeats on every reconnect attempt.
+        // The underlying error has already been logged with its detail.
+        this.error('Device error:', utilFunctions.isError(error) ? error.message : utilFunctions.formatError(error));
 
         const errorMessage = this._formatErrorMessage(error);
         const timeString = new Date().toLocaleString('sv-SE', {
