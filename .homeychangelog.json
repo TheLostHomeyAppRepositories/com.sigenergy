@@ -82,5 +82,9 @@
   "0.1.4": {
     "en": "Initial version",
     "sv": "Första versionen"
+  },
+  "0.6.2": {
+    "en": "Faster recovery after a network outage: the app now retries the connection at least every 5 minutes instead of every 10. When the inverter cannot be reached, for example after a router restart gave it a new IP address, the error message and diagnostic reports now say so and show how long the device has been offline.",
+    "sv": "Snabbare återhämtning efter ett nätverksavbrott: appen försöker nu återansluta minst var 5:e minut i stället för var 10:e. När växelriktaren inte kan nås, till exempel efter att en omstart av routern gett den en ny IP-adress, säger felmeddelandet och diagnostikrapporterna nu det och visar hur länge enheten har varit offline."
   }
 }
