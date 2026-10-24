@@ -11,6 +11,7 @@
     "class": "sensor",
     "capabilities": [
         "grid_status",
+        "grid_sensor_status",
         "measure_power",
         "measure_power.L1",
         "measure_power.L2",

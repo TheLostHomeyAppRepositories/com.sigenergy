@@ -35,6 +35,24 @@ class PlantDriver extends BaseDriver {
             .registerRunListener(async (args) => {
                 return await args.device.removeEssChargeLimit();
             });
+
+        // Action: Hand battery control to Homey, or back to mySigen
+        this.homey.flow.getActionCard('set_remote_ems')
+            .registerRunListener(async (args) => {
+                return await args.device.setRemoteEms(args.state === 'on');
+            });
+
+        // Action: Pick what the plant does while under remote EMS
+        this.homey.flow.getActionCard('set_remote_ems_control_mode')
+            .registerRunListener(async (args) => {
+                return await args.device.setRemoteEmsControlMode(args.mode);
+            });
+
+        // Action: Charge the battery from the grid at a given rate
+        this.homey.flow.getActionCard('force_charge_from_grid')
+            .registerRunListener(async (args) => {
+                return await args.device.forceChargeFromGrid(args.power);
+            });
     }
 
     async onPair(session) {

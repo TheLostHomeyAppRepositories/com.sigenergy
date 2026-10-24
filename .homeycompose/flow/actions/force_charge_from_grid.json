@@ -1,0 +1,32 @@
+{
+    "id": "force_charge_from_grid",
+    "title": {
+        "en": "Force charge battery from grid",
+        "sv": "Tvångsladda batteriet från nätet"
+    },
+    "titleFormatted": {
+        "en": "Force charge battery from grid at [[power]] kW",
+        "sv": "Tvångsladda batteriet från nätet med [[power]] kW"
+    },
+    "hint": {
+        "en": "Turns remote EMS on in 'Charge, grid first' mode and sets the max battery charge power to the given value. When done, turn remote EMS off and remove the max battery charge power limit.",
+        "sv": "Slår på fjärrstyrd EMS i läget 'Ladda, nätet först' och sätter batteriets max laddeffekt till angivet värde. När du är klar, slå av fjärrstyrd EMS och ta bort begränsningen av batteriets laddeffekt."
+    },
+    "args": [
+        {
+            "name": "power",
+            "type": "number",
+            "min": 0,
+            "step": 0.1,
+            "title": {
+                "en": "Power (kW)",
+                "sv": "Effekt (kW)"
+            }
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=plant"
+        }
+    ]
+}

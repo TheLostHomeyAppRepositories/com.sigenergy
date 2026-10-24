@@ -20,7 +20,9 @@
         "measure_power.battery",
         "measure_power.evcharger",
         "measure_power.grid",
-        "measure_battery"
+        "measure_battery",
+        "ems_work_mode",
+        "grid_sensor_status"
     ],
     "capabilitiesOptions": {
         "measure_power.grid": {

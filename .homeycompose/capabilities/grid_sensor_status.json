@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Grid sensor",
+    "sv": "Nätsensor"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/input.svg"
+}

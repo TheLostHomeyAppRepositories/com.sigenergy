@@ -1,0 +1,38 @@
+{
+    "id": "set_remote_ems_control_mode",
+    "title": {
+        "en": "Set remote EMS control mode",
+        "sv": "Sätt styrläge för fjärrstyrd EMS"
+    },
+    "titleFormatted": {
+        "en": "Set remote EMS control mode to [[mode]]",
+        "sv": "Sätt styrläge för fjärrstyrd EMS till [[mode]]"
+    },
+    "hint": {
+        "en": "Turns remote EMS on and sets what the system does. Standby holds the battery. Charge modes charge the battery, from the grid or PV first, at up to the max battery charge power. Discharge modes export, from PV or the battery first. Turn remote EMS off to return to the mode chosen in mySigen.",
+        "sv": "Slår på fjärrstyrd EMS och sätter vad systemet ska göra. Standby håller batteriet. Laddlägena laddar batteriet, från nätet eller solceller först, med upp till batteriets max laddeffekt. Urladdningslägena exporterar, från solceller eller batteriet först. Slå av fjärrstyrd EMS för att återgå till läget som valts i mySigen."
+    },
+    "args": [
+        {
+            "name": "mode",
+            "type": "dropdown",
+            "title": {
+                "en": "Mode",
+                "sv": "Läge"
+            },
+            "values": [
+                { "id": "1", "title": { "en": "Standby", "sv": "Standby" } },
+                { "id": "2", "title": { "en": "Max self consumption", "sv": "Max egenförbrukning" } },
+                { "id": "3", "title": { "en": "Charge, grid first", "sv": "Ladda, nätet först" } },
+                { "id": "4", "title": { "en": "Charge, PV first", "sv": "Ladda, solceller först" } },
+                { "id": "5", "title": { "en": "Discharge, PV first", "sv": "Ladda ur, solceller först" } },
+                { "id": "6", "title": { "en": "Discharge, battery first", "sv": "Ladda ur, batteriet först" } }
+            ]
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=plant"
+        }
+    ]
+}

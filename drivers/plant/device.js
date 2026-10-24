@@ -21,9 +21,11 @@ class PlantDevice extends BaseDevice {
     /**
      * Capability migrations for devices paired by an older app version. The
      * add/remove helpers log only when they actually change something, so an
-     * already up-to-date device produces no output. Nothing to migrate yet.
+     * already up-to-date device produces no output.
      */
     async upgradeDevice() {
+        await this.addCapabilityHelper('ems_work_mode');
+        await this.addCapabilityHelper('grid_sensor_status');
     }
 
     createApi(options) {
@@ -138,6 +140,61 @@ class PlantDevice extends BaseDevice {
         return true;
     }
 
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Hands control to (or takes it back from) Homey. Disabling returns the
+     * plant to the EMS mode chosen in mySigen.
+     */
+    async setRemoteEms(enabled) {
+        await this._writeRemoteEms(`${enabled ? 'enable' : 'disable'} remote EMS`,
+            () => this.api.setRemoteEmsEnabled(enabled));
+        return true;
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Remote EMS is enabled first, since the control mode only takes effect
+     * while it is on.
+     */
+    async setRemoteEmsControlMode(mode) {
+        const value = Number(mode);
+        if (!enums.isRemoteEmsControlMode(value)) {
+            throw new Error(`Unsupported remote EMS control mode '${mode}'`);
+        }
+
+        await this.setRemoteEms(true);
+        await this._writeRemoteEms(`set remote EMS control mode to ${value}`,
+            () => this.api.setRemoteEmsControlMode(value));
+        return true;
+    }
+
+    /**
+     * Public method - used by flow action cards.
+     *
+     * Charges the battery from the grid at up to kW. The rate is bounded by the
+     * ESS max charging limit (40032), which stays in place afterwards until it
+     * is removed or changed.
+     */
+    async forceChargeFromGrid(kW) {
+        await this.setEssMaxChargePower(kW);
+        return this.setRemoteEmsControlMode(enums.REMOTE_EMS_MODE_CHARGE_GRID_FIRST);
+    }
+
+    async _writeRemoteEms(action, write) {
+        if (!this.api) {
+            throw new Error(`Failed to ${action}! Device is not connected.`);
+        }
+
+        await write().catch(reason => {
+            this.error(`Failed to ${action}!`, reason);
+            throw new Error(`Failed to ${action}! ${utilFunctions.formatError(reason)}`);
+        });
+
+        this.logMessage(`Remote EMS: ${action}`);
+    }
+
     async _handleReadingsEvent(message) {
         try {
             await this._updatePlantProperties(message);
@@ -180,6 +237,8 @@ class PlantDevice extends BaseDevice {
             this._updateProperty('measure_power.load', message.generalLoadPower),
             this._updateProperty('measure_power.evcharger', evChargerPower),
             this._updateProperty('measure_battery', message.batterySoc),
+            this._updateProperty('ems_work_mode', enums.decodeEmsWorkMode(message.emsWorkMode)),
+            this._updateProperty('grid_sensor_status', enums.decodeGridSensorStatus(message.gridSensorStatus)),
         ]);
 
         if (Number.isFinite(message.gridStatus)) {

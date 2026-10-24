@@ -1,0 +1,34 @@
+{
+    "id": "set_remote_ems",
+    "title": {
+        "en": "Turn remote EMS on or off",
+        "sv": "Slå på eller av fjärrstyrd EMS"
+    },
+    "titleFormatted": {
+        "en": "Turn remote EMS [[state]]",
+        "sv": "Slå [[state]] fjärrstyrd EMS"
+    },
+    "hint": {
+        "en": "While remote EMS is on, the system follows the remote EMS control mode set from Homey and ignores the mode chosen in mySigen. Turn it off to hand control back to mySigen. Limits set with the max charge/discharge power cards stay in place until removed.",
+        "sv": "När fjärrstyrd EMS är på följer systemet det styrläge som sätts från Homey och ignorerar läget som valts i mySigen. Slå av för att lämna tillbaka styrningen till mySigen. Gränser satta med korten för max ladd-/urladdningseffekt ligger kvar tills de tas bort."
+    },
+    "args": [
+        {
+            "name": "state",
+            "type": "dropdown",
+            "title": {
+                "en": "State",
+                "sv": "Läge"
+            },
+            "values": [
+                { "id": "on", "title": { "en": "on", "sv": "på" } },
+                { "id": "off", "title": { "en": "off", "sv": "av" } }
+            ]
+        },
+        {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=plant"
+        }
+    ]
+}

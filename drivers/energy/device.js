@@ -14,6 +14,7 @@ class EnergyDevice extends BaseDevice {
 
     async upgradeDevice() {
         await this.addCapabilityHelper('grid_status');
+        await this.addCapabilityHelper('grid_sensor_status');
         await this.addCapabilityHelper('phase_control');
     }
 
@@ -95,6 +96,11 @@ class EnergyDevice extends BaseDevice {
             // Independent phase control
             this._updateProperty('phase_control', phaseControl)
         ];
+
+        if (Number.isFinite(message.gridSensorStatus)) {
+            const gridSensorStatus = enums.decodeGridSensorStatus(message.gridSensorStatus);
+            propertyUpdates.unshift(this._updateProperty('grid_sensor_status', gridSensorStatus));
+        }
 
         if (Number.isFinite(message.gridStatus)) {
             const gridStatus = enums.decodeGridStatus(message.gridStatus);

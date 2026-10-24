@@ -63,3 +63,20 @@ test('getDCChargerStates returns id/name pairs for autocomplete', () => {
     const charging = states.find(s => s.name === 'Charging');
     assert.deepEqual(charging, { id: '3', name: 'Charging' });
 });
+
+test('decodeGridSensorStatus and decodeEmsWorkMode resolve known values', () => {
+    assert.equal(enums.decodeGridSensorStatus(0), 'Not connected');
+    assert.equal(enums.decodeGridSensorStatus(1), 'Connected');
+    assert.equal(enums.decodeGridSensorStatus(undefined), undefined);
+    assert.equal(enums.decodeEmsWorkMode(7), 'Remote EMS');
+    assert.equal(enums.decodeEmsWorkMode(3), 'UNKNOWN (3)');
+});
+
+test('isRemoteEmsControlMode accepts only the exposed control modes', () => {
+    for (const mode of [1, 2, 3, 4, 5, 6]) {
+        assert.equal(enums.isRemoteEmsControlMode(mode), true);
+    }
+    for (const mode of [0, 7, 8, '3', 3.5, undefined]) {
+        assert.equal(enums.isRemoteEmsControlMode(mode), false);
+    }
+});
