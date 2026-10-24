@@ -90,5 +90,9 @@
   "0.6.3": {
     "en": "New Plant flow cards to control the battery via remote EMS: turn remote EMS on/off, set the control mode (standby, charge or discharge) and force charge from the grid at a chosen kW. The Plant and Energy devices now show grid sensor status, and Plant shows the current EMS mode. Fixed EV AC charger start/stop commands being swapped.",
     "sv": "Nya flödeskort för System för att styra batteriet via fjärrstyrd EMS: slå på/av fjärrstyrd EMS, välj styrläge (standby, laddning eller urladdning) och tvångsladda från nätet med vald effekt i kW. System och Energimätare visar nu nätsensorns status, och System visar aktuellt EMS-läge. Rättade att start/stopp för AC-laddaren var omvända."
+  },
+  "0.6.4": {
+    "en": "The Plant device now shows daily and total household consumption. The battery now reports idle when it is holding near 0 W, instead of flipping between charging and discharging.",
+    "sv": "System-enheten visar nu dagens och total förbrukning i hemmet. Batteriet visas nu som vilande när effekten ligger nära 0 W, i stället för att växla mellan laddning och urladdning."
   }
 }

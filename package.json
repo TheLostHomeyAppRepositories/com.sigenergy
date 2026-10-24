@@ -1,6 +1,6 @@
 {
   "name": "com.sigenergy",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "main": "app.js",
   "dependencies": {
     "@sentry/node": "^7.120.3",
