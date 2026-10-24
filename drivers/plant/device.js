@@ -26,6 +26,8 @@ class PlantDevice extends BaseDevice {
     async upgradeDevice() {
         await this.addCapabilityHelper('ems_work_mode');
         await this.addCapabilityHelper('grid_sensor_status');
+        await this.addCapabilityHelper('meter_power.consumption_daily');
+        await this.addCapabilityHelper('meter_power.consumption');
     }
 
     createApi(options) {
@@ -239,6 +241,8 @@ class PlantDevice extends BaseDevice {
             this._updateProperty('measure_battery', message.batterySoc),
             this._updateProperty('ems_work_mode', enums.decodeEmsWorkMode(message.emsWorkMode)),
             this._updateProperty('grid_sensor_status', enums.decodeGridSensorStatus(message.gridSensorStatus)),
+            this._updateProperty('meter_power.consumption_daily', message.dailyConsumption),
+            this._updateProperty('meter_power.consumption', message.totalConsumption),
         ]);
 
         if (Number.isFinite(message.gridStatus)) {

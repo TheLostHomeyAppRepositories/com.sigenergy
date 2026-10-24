@@ -22,7 +22,9 @@
         "measure_power.grid",
         "measure_battery",
         "ems_work_mode",
-        "grid_sensor_status"
+        "grid_sensor_status",
+        "meter_power.consumption_daily",
+        "meter_power.consumption"
     ],
     "capabilitiesOptions": {
         "measure_power.grid": {
@@ -53,6 +55,18 @@
             "title": {
                 "en": "EV charger",
                 "sv": "EV laddare"
+            }
+        },
+        "meter_power.consumption_daily": {
+            "title": {
+                "en": "Daily consumption",
+                "sv": "Dagens förbrukning"
+            }
+        },
+        "meter_power.consumption": {
+            "title": {
+                "en": "Total consumption",
+                "sv": "Total förbrukning"
             }
         }
     },

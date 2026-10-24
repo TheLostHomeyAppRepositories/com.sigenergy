@@ -8,7 +8,12 @@ const enums = require('../../lib/enums.js');
 test('decodeBatteryChargingState maps running state + power to charge/discharge/idle', () => {
     assert.equal(enums.decodeBatteryChargingState(1, 500), 'charging');
     assert.equal(enums.decodeBatteryChargingState(1, -500), 'discharging');
-    assert.equal(enums.decodeBatteryChargingState(1, 0), 'discharging'); // power > 0 is false
+    assert.equal(enums.decodeBatteryChargingState(1, 0), 'idle');
+    assert.equal(enums.decodeBatteryChargingState(1, 20), 'idle'); // within the idle deadband
+    assert.equal(enums.decodeBatteryChargingState(1, -20), 'idle');
+    assert.equal(enums.decodeBatteryChargingState(1, 21), 'charging');
+    assert.equal(enums.decodeBatteryChargingState(1, -21), 'discharging');
+    assert.equal(enums.decodeBatteryChargingState(1, undefined), undefined); // power not read
     assert.equal(enums.decodeBatteryChargingState(0, 500), 'idle'); // standby
     assert.equal(enums.decodeBatteryChargingState(2, 0), 'idle'); // fault
     assert.equal(enums.decodeBatteryChargingState(99, 0), 'idle'); // unknown value still maps
