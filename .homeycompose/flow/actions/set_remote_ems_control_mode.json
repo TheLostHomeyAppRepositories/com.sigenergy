@@ -9,8 +9,8 @@
         "sv": "Sätt styrläge för fjärrstyrd EMS till [[mode]]"
     },
     "hint": {
-        "en": "Turns remote EMS on and sets what the system does. Standby holds the battery. Charge modes charge the battery, from the grid or PV first, at up to the max battery charge power. Discharge modes export, from PV or the battery first. Turn remote EMS off to return to the mode chosen in mySigen.",
-        "sv": "Slår på fjärrstyrd EMS och sätter vad systemet ska göra. Standby håller batteriet. Laddlägena laddar batteriet, från nätet eller solceller först, med upp till batteriets max laddeffekt. Urladdningslägena exporterar, från solceller eller batteriet först. Slå av fjärrstyrd EMS för att återgå till läget som valts i mySigen."
+        "en": "Turns remote EMS on and sets what the system does. Standby holds the battery. Charge modes charge the battery, from the grid or PV first, at up to the max battery charge power. Discharge modes export, from PV or the battery first. Turn remote EMS off to hand control back to the system (some firmware then runs Max self consumption instead of AI mode).",
+        "sv": "Slår på fjärrstyrd EMS och sätter vad systemet ska göra. Standby håller batteriet. Laddlägena laddar batteriet, från nätet eller solceller först, med upp till batteriets max laddeffekt. Urladdningslägena exporterar, från solceller eller batteriet först. Slå av fjärrstyrd EMS för att lämna tillbaka styrningen till systemet (viss firmware kör då Max egenförbrukning i stället för AI-läge)."
     },
     "args": [
         {

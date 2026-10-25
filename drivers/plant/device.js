@@ -145,8 +145,11 @@ class PlantDevice extends BaseDevice {
     /**
      * Public method - used by flow action cards.
      *
-     * Hands control to (or takes it back from) Homey. Disabling returns the
-     * plant to the EMS mode chosen in mySigen.
+     * Hands control to (or takes it back from) Homey. Disabling hands control
+     * back to the plant's own EMS, but on some firmware (reported on
+     * V100R001C00SPC117) it falls back to Max self consumption rather than the
+     * AI mode chosen in mySigen. The protocol has no register to select the
+     * work mode, so the app cannot restore it.
      */
     async setRemoteEms(enabled) {
         await this._writeRemoteEms(`${enabled ? 'enable' : 'disable'} remote EMS`,
