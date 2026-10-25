@@ -138,8 +138,25 @@ class PlantDevice extends BaseDevice {
             throw new Error(`Failed to set max ${label} power! ${utilFunctions.formatError(reason)}`);
         });
 
-        this.logMessage(`Set ESS max ${label} power to ${kW} kW`);
+        this.logMessage(`Set ESS max ${label} power to ${kW} kW (${await this._describeEssLimitReadback(label)})`);
         return true;
+    }
+
+    /**
+     * Some firmware accepts the limit write but does not enforce it in AI mode.
+     * Logging what the plant stored next to the EMS work mode lets a diagnostic
+     * report tell "stored but ignored" apart from "never stored". A failed
+     * readback is only reported, since the write itself succeeded.
+     */
+    async _describeEssLimitReadback(label) {
+        let readback;
+        try {
+            const value = await this.api.readEssLimit(label);
+            readback = value === null ? 'not set' : `${value} kW`;
+        } catch (error) {
+            readback = `failed: ${utilFunctions.formatError(error)}`;
+        }
+        return `readback ${readback}, EMS work mode: ${this.getCapabilityValue('ems_work_mode') ?? 'unknown'}`;
     }
 
     /**
