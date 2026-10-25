@@ -94,5 +94,9 @@
   "0.6.4": {
     "en": "The Plant device now shows daily and total household consumption. The battery now reports idle when it is holding near 0 W, instead of flipping between charging and discharging.",
     "sv": "System-enheten visar nu dagens och total förbrukning i hemmet. Batteriet visas nu som vilande när effekten ligger nära 0 W, i stället för att växla mellan laddning och urladdning."
+  },
+  "0.6.5": {
+    "en": "The battery charge and discharge limit cards now explain that some firmware ignores the limits in AI mode, and point to remote EMS Standby instead. Turning remote EMS off is now described correctly: some firmware returns to Max self consumption rather than AI mode. Diagnostic reports now show the limit the system actually stored.",
+    "sv": "Korten för batteriets ladd- och urladdningsgräns förklarar nu att viss firmware ignorerar gränserna i AI-läge och hänvisar till Standby i fjärrstyrd EMS i stället. Att slå av fjärrstyrd EMS beskrivs nu korrekt: viss firmware går tillbaka till Max egenförbrukning i stället för AI-läge. Diagnostikrapporter visar nu den gräns systemet faktiskt sparade."
   }
 }
