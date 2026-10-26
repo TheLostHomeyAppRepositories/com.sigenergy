@@ -24,6 +24,11 @@ class BatteryDevice extends BaseDevice {
         await this.removeCapabilityHelper('measure_current.phaseB');
         await this.removeCapabilityHelper('measure_voltage.phaseC');
         await this.removeCapabilityHelper('measure_current.phaseC');
+
+        // The min cell temperature register (30621) always reads 0, so it is
+        // replaced by the average cell temperature (30603).
+        await this.removeCapabilityHelper('measure_temperature.minCell');
+        await this.addCapabilityHelper('measure_temperature.avgCell');
     }
 
     createApi(options) {
@@ -67,7 +72,7 @@ class BatteryDevice extends BaseDevice {
         let updates = [
             this._updateProperty('measure_battery', message.soc),
             this._updateProperty('measure_power', message.power),
-            this._updateProperty('measure_temperature.minCell', message.minCellTemperature),
+            this._updateProperty('measure_temperature.avgCell', message.avgCellTemperature),
             this._updateProperty('measure_temperature.maxCell', message.maxCellTemperature),
             this._updateProperty('measure_temperature.pcs', message.pcsTemperature),
             // this._updateProperty('measure_voltage.minCell', message.minCellVoltage),

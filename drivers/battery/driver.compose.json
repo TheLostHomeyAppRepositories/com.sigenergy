@@ -24,7 +24,7 @@
         "measure_battery",
         "battery_charging_state",
         "measure_power",
-        "measure_temperature.minCell",
+        "measure_temperature.avgCell",
         "measure_temperature.maxCell",
         "measure_temperature.pcs",
         "meter_power.charged",
@@ -32,10 +32,10 @@
         "firmware"
     ],
     "capabilitiesOptions": {
-        "measure_temperature.minCell": {
+        "measure_temperature.avgCell": {
             "title": {
-                "en": "Min cell temp",
-                "sv": "Min celltemp"
+                "en": "Avg cell temp",
+                "sv": "Medel celltemp"
             }
         },
         "measure_temperature.maxCell": {
