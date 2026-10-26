@@ -98,5 +98,9 @@
   "0.6.5": {
     "en": "The battery charge and discharge limit cards now explain that some firmware ignores the limits in AI mode, and point to remote EMS Standby instead. Turning remote EMS off is now described correctly: some firmware returns to Max self consumption rather than AI mode. Diagnostic reports now show the limit the system actually stored.",
     "sv": "Korten för batteriets ladd- och urladdningsgräns förklarar nu att viss firmware ignorerar gränserna i AI-läge och hänvisar till Standby i fjärrstyrd EMS i stället. Att slå av fjärrstyrd EMS beskrivs nu korrekt: viss firmware går tillbaka till Max egenförbrukning i stället för AI-läge. Diagnostikrapporter visar nu den gräns systemet faktiskt sparade."
+  },
+  "0.6.6": {
+    "en": "Battery device: Min cell temperature always showed 0 because the battery does not report it, so it has been replaced by the average cell temperature.",
+    "sv": "Batteri-enheten: Min celltemperatur visade alltid 0 eftersom batteriet inte rapporterar den, så den har ersatts med medeltemperaturen för cellerna."
   }
 }
